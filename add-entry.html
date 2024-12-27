@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Add new entry" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/favicons/pico_neutral.ico" />
+  <title>項目追加 - ピコ鍛</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/addEntry.css" />
+  <script type="module" src="scripts/dataManager.js"></script>
+  <script type="module" src="scripts/addEntry.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navigation">
+      <ul class="navigation__list">
+        <li class="navigation__item"><a href="index.html">ホーム</a></li>
+        <li class="navigation__item"><a href="search.html">検索</a></li>
+        <li class="navigation__item navigation__item--active"><a href="add-entry.html">項目追加</a></li>
+        <li class="navigation__item"><a href="review.html">復習</a></li>
+        <li class="navigation__item"><a href="random.html">お任せ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="add-entry-main">
+    <section class="add-entry-controls">
+      <h1 class="add-entry-controls__title">新項目を追加</h1>
+      <div class="add-entry-controls__form">
+        <label for="entry-type">種類:</label>
+        <select id="entry-type" class="add-entry-controls__select">
+          <option value="kanji">漢字</option>
+          <option value="radical">部首</option>
+          <option value="word">言葉</option>
+          <option value="example">例文</option>
+          <option value="idiom">四字熟語</option>
+        </select>
+
+        <!-- The following sections can be shown/hidden dynamically based on 'entry-type' -->
+        <div id="entry-fields" class="add-entry-controls__fields">
+          <!-- e.g., fields for adding a new kanji (character, readings, meaning, etc.) -->
+        </div>
+
+        <button id="save-btn" class="add-entry-controls__button">ピコっと登録！</button>
+      </div>
+    </section>
+
+    <section class="add-entry-output">
+      <h2 class="add-entry-output__heading">ステータス</h2>
+      <div id="output-container" class="add-entry-output__container">
+        <!-- Display status messages, or any JSON preview -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© 2024 Liam Armitage. All rights reserved.</p>
+  </footer>
+</body>
+</html>

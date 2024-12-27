@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Random Entry" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/favicons/pico_neutral.ico" />
+  <title>おまかせ - ピコ鍛</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/random.css" />
+  <script type="module" src="scripts/dataManager.js"></script>
+  <script type="module" src="scripts/random.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navigation">
+      <ul class="navigation__list">
+        <li class="navigation__item"><a href="index.html">ホーム</a></li>
+        <li class="navigation__item"><a href="search.html">検索</a></li>
+        <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
+        <li class="navigation__item"><a href="review.html">復習</a></li>
+        <li class="navigation__item navigation__item--active"><a href="random.html">お任せ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="random-main">
+    <section class="random-controls">
+      <h1 class="random-controls__title">おまかせ項目</h1>
+      <label for="random-type">種類</label>
+      <select id="random-type" class="random-controls__select">
+        <option value="kanji">漢字</option>
+        <option value="word">言葉</option>
+        <option value="idiom">四字熟語</option>
+      </select>
+
+      <label for="random-level">級</label>
+      <select id="random-level" class="random-controls__select">
+        <option value="all">全</option>
+        <option value="10">十</option>
+        <option value="9">九</option>
+        <option value="8">八</option>
+        <!-- ... Add more or dynamically generate -->
+      </select>
+
+      <button id="random-btn" class="random-controls__button">おまかせ</button>
+    </section>
+
+    <section class="random-display">
+      <h2 class="random-display__heading">結果</h2>
+      <div id="random-result" class="random-display__result">
+        <!-- The random item info goes here -->
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© 2024 Liam Armitage. All rights reserved.</p>
+  </footer>
+</body>
+</html>

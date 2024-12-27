@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="description" content="Review & SRS system" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="assets/favicons/pico_neutral.ico" />
+  <title>復習 - ピコ鍛</title>
+  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/review.css" />
+  <script type="module" src="scripts/dataManager.js"></script>
+  <script type="module" src="scripts/review.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navigation">
+      <ul class="navigation__list">
+        <li class="navigation__item"><a href="index.html">ホーム</a></li>
+        <li class="navigation__item"><a href="search.html">検索</a></li>
+        <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
+        <li class="navigation__item navigation__item--active"><a href="review.html">復習</a></li>
+        <li class="navigation__item"><a href="random.html">お任せ</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="review-main">
+    <section class="review-controls">
+      <h1 class="review-controls__title">復習セッション</h1>
+      <label for="review-level">復習モード</label>
+      <!-- This should instead be a slider for what 級 of 漢検-style questions should be targeted -->
+
+      <button id="start-review-btn" class="review-controls__button">復習開始</button>
+    </section>
+
+    <section class="review-quiz" id="quiz-container">
+      <!-- Dynamically display question + input fields. -->
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p class="site-footer__copy">© 2024 Liam Armitage. All rights reserved.</p>
+  </footer>
+</body>
+</html>
