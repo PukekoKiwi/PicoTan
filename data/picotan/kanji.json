@@ -73,39 +73,5 @@
       "kanjipedia": "https://www.kanjipedia.jp/kanji/0003924700"
     },
     "id": "k2"
-  },
-  "新": {
-    "character": "新",
-    "radical": "斤",
-    "stroke_count": 13,
-    "readings": {
-      "on": [
-        "シン"
-      ],
-      "kun": [
-        "あたら.しい",
-        "あら.た",
-        "にい",
-        "さら"
-      ]
-    },
-    "meanings": {
-      "japanese": [
-        "あたらしい。あらた。あたらしい物事。",
-        "あらたにする。あたらしいものにする。あらたまる。",
-        "にい。あら。ことばの上につけて「あたらしい」の意を表す。"
-      ],
-      "english": [
-        "New. Fresh. New things.",
-        "To renew. To make something new. To be renewed.",
-        "'Neo-' 'Nov-.' Attached to words to signify the meaning of 'new.'"
-      ]
-    },
-    "kanken_level": 9,
-    "references": {
-      "jitenon": "https://kanji.jitenon.jp/kanji/163",
-      "kanjipedia": "https://www.kanjipedia.jp/kanji/0003650300"
-    },
-    "id": "k3"
   }
 }
