@@ -95,7 +95,7 @@ async function addKanjiEntry(newEntry) {
         kanjiDictionary[newEntry.character] = newEntry;
 
         // Create a commit message
-        const commitMessage = `Add new kanji: ${newEntry.character}`;
+        const commitMessage = `Added a new kanji: ${newEntry.character}`;
 
         // Call the serverless function to update the file
         const response = await fetch(`/api/writeToFile`, {
@@ -128,38 +128,5 @@ async function addKanjiEntry(newEntry) {
     // Look up specific kanji
     lookupKanji("静"); 
     lookupKanji("漢"); 
-
-    // Add a new kanji entry for "新"
-    const newKanjiEntry = {
-        character: "新",
-        radical: "斤",
-        stroke_count: 13,
-        readings: {
-            on: ["シン"],
-            kun: ["あたら.しい", "あら.た", "にい", "さら"]
-        },
-        meanings: {
-            japanese: [
-                "あたらしい。あらた。あたらしい物事。",
-                "あらたにする。あたらしいものにする。あらたまる。",
-                "にい。あら。ことばの上につけて「あたらしい」の意を表す。",
-            ],
-            english: [
-                "New. Fresh. New things.",
-                "To renew. To make something new. To be renewed.",
-                "'Neo-' 'Nov-.' Attached to words to signify the meaning of 'new.'"
-            ]
-        },
-        kanken_level: 9,
-        references: {
-            jitenon: "https://kanji.jitenon.jp/kanji/163",
-            kanjipedia: "https://www.kanjipedia.jp/kanji/0003650300"
-        },
-        id: "k3"
-    };
-
-    await addKanjiEntry(newKanjiEntry); // Add the new kanji entry
-
-    // Verify the new kanji entry
     lookupKanji("新"); 
 })();
