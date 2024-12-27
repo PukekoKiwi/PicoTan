@@ -72,40 +72,51 @@ function lookupKanji(character) {
 
 /**
  * Adds a new kanji entry to the kanji JSON file using the serverless function.
+ * Updates the local memory kanjiDictionary as well.
  * @param {Object} newEntry - The new kanji entry to add.
  */
 async function addKanjiEntry(newEntry) {
     const filePath = "data/picotan/kanji.json"; // Path to the kanji JSON file
-  
+
     try {
-      // Fetch the current kanji data
-      const currentData = await fetchKanjiData();
-      if (!currentData) {
-        throw new Error("Failed to fetch current kanji data.");
-      }
-  
-      // Add the new entry to the kanji data
-      currentData[newEntry.character] = newEntry;
-  
-      // Call the serverless function to update the file
-      const response = await fetch(`/api/writeToFile`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          filePath,
-          newContent: currentData,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-  
-      console.log("New kanji entry added successfully!");
+        // Fetch the current kanji data
+        const currentData = await fetchKanjiData();
+        if (!currentData) {
+            throw new Error("Failed to fetch current kanji data.");
+        }
+
+        // Add the new entry to the kanji data
+        currentData[newEntry.character] = newEntry;
+
+        // Update the in-memory kanjiDictionary
+        if (!kanjiDictionary) {
+            kanjiDictionary = {};
+        }
+        kanjiDictionary[newEntry.character] = newEntry;
+
+        // Create a commit message
+        const commitMessage = `Add new kanji: ${newEntry.character}`;
+
+        // Call the serverless function to update the file
+        const response = await fetch(`/api/writeToFile`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                filePath,
+                newContent: currentData,
+                commitMessage, // Pass the commit message
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        console.log("New kanji entry added successfully!");
     } catch (error) {
-      console.error("Error adding kanji entry:", error);
+        console.error("Error adding kanji entry:", error);
     }
-  }  
+}
 
 // Test calls after initialization
 (async () => {
@@ -117,5 +128,38 @@ async function addKanjiEntry(newEntry) {
     // Look up specific kanji
     lookupKanji("静"); 
     lookupKanji("漢"); 
+
+    // Add a new kanji entry for "新"
+    const newKanjiEntry = {
+        character: "新",
+        radical: "斤",
+        stroke_count: 13,
+        readings: {
+            on: ["シン"],
+            kun: ["あたら.しい", "あら.た", "にい", "さら"]
+        },
+        meanings: {
+            japanese: [
+                "あたらしい。あらた。あたらしい物事。",
+                "あらたにする。あたらしいものにする。あらたまる。",
+                "にい。あら。ことばの上につけて「あたらしい」の意を表す。",
+            ],
+            english: [
+                "New. Fresh. New things.",
+                "To renew. To make something new. To be renewed.",
+                "'Neo-' 'Nov-.' Attached to words to signify the meaning of 'new.'"
+            ]
+        },
+        kanken_level: 9,
+        references: {
+            jitenon: "https://kanji.jitenon.jp/kanji/163",
+            kanjipedia: "https://www.kanjipedia.jp/kanji/0003650300"
+        },
+        id: "k3"
+    };
+
+    await addKanjiEntry(newKanjiEntry); // Add the new kanji entry
+
+    // Verify the new kanji entry
     lookupKanji("新"); 
 })();
