@@ -11,9 +11,15 @@
   <script type="module" src="scripts/dataManager.js"></script>
   <script type="module" src="scripts/uiHelpers.js"></script>
   <script type="module" src="scripts/search.js"></script>
+  <script type="module" src="scripts/logout.js"></script>
+  <script type="module" src="scripts/greeting.js"></script>
 </head>
 <body>
   <header class="site-header">
+    <div class="greeting-container">
+      <p id="greetingMessage" class="greeting-message"></p>
+    </div>
+
     <nav class="navigation">
       <ul class="navigation__list">
         <li class="navigation__item"><a href="index.html">ホーム</a></li>
@@ -21,6 +27,8 @@
         <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
         <li class="navigation__item"><a href="review.html">復習</a></li>
         <li class="navigation__item"><a href="random.html">お任せ</a></li>
+        <li class="navigation__item"><a href="login.html">ログイン</a></li>
+        <li class="navigation__item navigation__item--logout"><a href="#" id="logoutButton">ログアウト</a></li>
       </ul>
     </nav>
   </header>

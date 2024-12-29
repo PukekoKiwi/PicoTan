@@ -14,9 +14,9 @@ async function fetchCollectionData(collectionName) {
 }
 
 // Test fetching data from multiple collections
-fetchCollectionData("kanji");
-fetchCollectionData("kotowaza");
-fetchCollectionData("radicals");
+//fetchCollectionData("kanji");
+//fetchCollectionData("kotowaza");
+//fetchCollectionData("radicals");
 
 async function addEntry(collectionName, entry) {
   try {

@@ -2,21 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="description" content="Review & SRS system" />
+  <meta name="description" content="Login page for Picotan" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" href="assets/favicons/pico_neutral.ico" />
-  <title>復習 - ピコ鍛</title>
+  <title>ログイン - ピコ鍛</title>
   <link rel="stylesheet" href="styles/main.css" />
-  <link rel="stylesheet" href="styles/review.css" />
-  <script type="module" src="scripts/dataManager.js"></script>
-  <script type="module" src="scripts/review.js"></script>
+  <link rel="stylesheet" href="styles/login.css" />
+  <script type="module" src="scripts/login.js"></script>
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
 </head>
 <body>
+    
   <header class="site-header">
     <div class="greeting-container">
-      <p id="greetingMessage" class="greeting-message"></p>
+        <p id="greetingMessage" class="greeting-message"></p>
     </div>
 
     <nav class="navigation">
@@ -24,25 +24,27 @@
         <li class="navigation__item"><a href="index.html">ホーム</a></li>
         <li class="navigation__item"><a href="search.html">検索</a></li>
         <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
-        <li class="navigation__item navigation__item--active"><a href="review.html">復習</a></li>
+        <li class="navigation__item"><a href="review.html">復習</a></li>
         <li class="navigation__item"><a href="random.html">お任せ</a></li>
-        <li class="navigation__item"><a href="login.html">ログイン</a></li>
+        <li class="navigation__item navigation__item--active"><a href="login.html">ログイン</a></li>
         <li class="navigation__item navigation__item--logout"><a href="#" id="logoutButton">ログアウト</a></li>
       </ul>
     </nav>
   </header>
 
-  <main class="review-main">
-    <section class="review-controls">
-      <h1 class="review-controls__title">復習セッション</h1>
-      <label for="review-level">復習モード</label>
-      <!-- This should instead be a slider for what 級 of 漢検-style questions should be targeted -->
+  <main class="login-main">
+    <section class="login-container">
+      <h1 class="login-title">ログイン</h1>
+      <form id="loginForm" class="login-form">
+        <label for="username" class="login-label">ユーザー名:</label>
+        <input type="text" id="username" name="username" class="login-input" required />
 
-      <button id="start-review-btn" class="review-controls__button">復習開始</button>
-    </section>
+        <label for="password" class="login-label">パスワード:</label>
+        <input type="password" id="password" name="password" class="login-input" required />
 
-    <section class="review-quiz" id="quiz-container">
-      <!-- Dynamically display question + input fields. -->
+        <button type="submit" class="login-button">ログイン</button>
+      </form>
+      <div id="loginMessage" class="login-message"></div>
     </section>
   </main>
 
