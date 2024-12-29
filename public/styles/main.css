@@ -1,3 +1,12 @@
+:root {
+    --radicals-color: #00A1FA;
+    --kanji-color: #F100A1;
+    --words-color: #A100F1;
+    --yojijukugo-color: #F1A100;
+    --kotowaza-color: #A100A1;
+    --sentences-color: #F10000;
+}
+
 .navigation__item--logout {
     display: none;
-  }
+}
