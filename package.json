@@ -1,13 +1,12 @@
 {
   "name": "picotan",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "A kanji kentei study tool with MongoDB integration",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Liam Armitage",
   "license": "ISC",
   "dependencies": {
     "mongodb": "^6.12.0"
