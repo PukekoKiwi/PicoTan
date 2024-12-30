@@ -4,15 +4,19 @@
   <meta charset="UTF-8" />
   <meta name="description" content="Search page for entries" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
   <link rel="icon" href="assets/favicons/pico_neutral.ico" />
   <title>検索 - ピコ鍛</title>
+
+  <!--Styling-->
   <link rel="stylesheet" href="styles/main.css" />
-  <link rel="stylesheet" href="styles/search.css" />
-  <script type="module" src="scripts/dataManager.js"></script>
-  <script type="module" src="scripts/uiHelpers.js"></script>
-  <script type="module" src="scripts/search.js"></script>
+
+  <!-- Sitewide Scripts -->
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
+
+  <!-- Page-Specific Scripts -->
+  <script type="module" src="scripts/search.js"></script>
 </head>
 <body>
   <header class="site-header">
@@ -34,21 +38,37 @@
   </header>
 
   <main class="search-main">
+
     <section class="search-controls">
+
       <h1 class="search-controls__title">データベースを検索</h1>
       <div class="search-controls__form">
         <label for="search-type">検索モード:</label>
         <select id="search-type" class="search-controls__select">
+          <option value="radicals">部首</option>
           <option value="kanji">漢字</option>
-          <option value="word">言葉</option>
-          <option value="idiom">四字熟語</option>
+          <option value="words">言葉</option>
+          <option value="yojijukugo">四字熟語</option>
+          <option value="kotowaza">諺</option>
+          <option value="sentences">例文</option>
         </select>
-
-        <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
-
-        <button id="search-btn" class="search-controls__button">検索</button>
+    
+        <!-- Simple Search -->
+        <div id="simple-search" class="search-mode">
+          <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
+          <button id="search-btn" class="search-controls__button">検索</button>
+        </div>
+    
+        <!-- Advanced Search -->
+        <div id="advanced-search" class="search-mode hidden">
+          <!-- Fields dynamically added by JavaScript -->
+        </div>
+    
+        <button id="toggle-advanced" class="search-controls__toggle">詳細検索</button>
       </div>
+
     </section>
+    
 
     <section class="search-results">
       <h2 class="search-results__heading">結果</h2>
@@ -56,6 +76,7 @@
         <!-- Dynamically populated by search.js -->
       </div>
     </section>
+
   </main>
 
   <footer class="site-footer">
