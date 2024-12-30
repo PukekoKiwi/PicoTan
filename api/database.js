@@ -5,26 +5,10 @@ import { indexFieldMap } from "./constants";
 // Read operations
 
 /**
- * Retrieves a document by its ID from the specified collection.
- * @param {string} collectionName - The name of the collection.
- * @param {string} id - The ID of the document to fetch.
- * @returns {Promise<object|null>} - The matching document or null if not found.
- */
-export async function getEntryById(collectionName, id) {
-  const { db } = await connectMongo();
-
-  if (!ObjectId.isValid(id)) {
-    throw new Error(`Invalid document ID: ${id}`);
-  }
-
-  return await db.collection(collectionName).findOne({ _id: new ObjectId(id) });
-}
-
-/**
- * Retrieves multiple documents by their IDs from the specified collection.
+ * Retrieves entries by their IDs from the specified collection, preserving the order of the input IDs.
  * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
  * @param {Array<string>} ids - An array of document IDs to fetch.
- * @returns {Promise<Array<object>>} - An array of matching documents.
+ * @returns {Promise<Array<object>>} - An array of matching documents in the same order as the input IDs.
  */
 export async function getEntriesByIds(collectionName, ids) {
   const { db } = await connectMongo();
@@ -38,26 +22,15 @@ export async function getEntriesByIds(collectionName, ids) {
   });
 
   // Query the collection
-  return await db.collection(collectionName).find({ _id: { $in: objectIds } }).toArray();
+  const results = await db.collection(collectionName).find({ _id: { $in: objectIds } }).toArray();
+
+  // Sort the results to match the order of the input IDs
+  const resultsById = new Map(results.map(doc => [doc._id.toString(), doc]));
+  return ids.map(id => resultsById.get(id) || null); // Ensure order and include nulls for missing entries
 }
 
 /**
- * Retrieves a single entry from a specified collection by its indexed field.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {string} indexValue - The value to search for (e.g., "漢", "感謝").
- * @returns {Promise<object|null>} - The matching document or null if not found.
- */
-export async function getEntryByIndex(collectionName, indexValue) {
-  const { db } = await connectMongo();
-  const indexField = indexFieldMap[collectionName]; // Use the map to get the indexed field
-  if (!indexField) throw new Error(`Invalid collection: ${collectionName}`);
-
-  const query = { [indexField]: indexValue }; // Construct the query dynamically
-  return db.collection(collectionName).findOne(query);
-}
-
-/**
- * Retrieves multiple entries from a specified collection based on a list of indexed values.
+ * Retrieves entries from a specified collection based on a list of indexed values.
  * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
  * @param {Array<string>} indexValues - An array of values to search for (e.g., ["漢字", "感謝"]).
  * @returns {Promise<Array<object>>} - An array of matching documents.
@@ -192,27 +165,6 @@ export async function editEntry(collectionName, id, updateData) {
 
   if (result.matchedCount === 0) {
     throw new Error(`No document found with _id: ${id}`);
-  }
-
-  return result;
-}
-
-/**
- * Deletes a document by its ID from the specified collection.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {string} id - The ID of the document to delete.
- * @returns {Promise<object>} - The result of the delete operation.
- */
-export async function deleteEntry(collectionName, id) {
-  const { db } = await connectMongo();
-
-  if (!ObjectId.isValid(id)) {
-    throw new Error(`Invalid document ID: ${id}`);
-  }
-
-  const result = await db.collection(collectionName).deleteOne({ _id: new ObjectId(id) });
-  if (result.deletedCount === 0) {
-    throw new Error(`No document found with ID: ${id}`);
   }
 
   return result;

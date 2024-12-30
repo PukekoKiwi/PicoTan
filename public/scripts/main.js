@@ -1,40 +1,19 @@
-import { getEntryById, getEntriesByIds, getEntryByIndex, getEntriesByIndexes, getEntriesBySearch, getEntriesByFuzzySearch, addEntry, editEntry, deleteEntry } from "./dbUtils.js";
+import { getEntriesByIds, getEntriesByIndexes, getEntriesBySearch, getEntriesByFuzzySearch, addEntry, editEntry } from "./dbUtils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  
   /*
   console.log("Experimenting with database queries...");
 
-  // Fetch a single entry directly
-  console.log("\nFetching a single entry by index:");
-
-  const kanjiEntry = await getEntryByIndex("kanji", "新"); 
-  console.log("Fetched Kanji Entry for '新':", kanjiEntry);
-
-  const kanjiEntry2 = await getEntryByIndex("kanji", "感"); 
-  console.log("Fetched Kanji Entry for '感':", kanjiEntry);
-
-  const radicalEntry = await getEntryByIndex("radicals", "氵"); 
-  console.log("Fetched Radical Entry for '氵':", radicalEntry);
-
-  const wordEntry = await getEntryByIndex("words", "漢字"); 
-  console.log("Fetched Word Entry for '漢字':", wordEntry);
-
   console.log("   ");
-  console.log("Testing getEntryById...");
+  console.log("Testing getEntriesByIndexes...");
   console.log("   ");
 
-  // Fetch a single entry by its ID
+  const indexValues = ["新", "漢", "感"];
+
   const collectionName = "kanji";
-  const documentId = kanjiEntry._id;
-
-  try {
-    // Fetch the entry by ID
-    console.log(`Fetching entry from collection "${collectionName}" with ID "${documentId}"...`);
-    const entry = await getEntryById(collectionName, documentId);
-    console.log("Fetched entry:", entry);
-  } catch (error) {
-    console.error("Failed to fetch entry by ID:", error.message);
-  }
+  const entriesByIndex = await getEntriesByIndexes(collectionName, indexValues);
+  console.log("Fetched entries:", entriesByIndex);
 
   console.log("   ");
   console.log("Testing getEntriesByIds...");
@@ -42,8 +21,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Fetch multiple entries by their IDs
   const documentIds = [
-    kanjiEntry._id,
-    kanjiEntry2._id
+    entriesByIndex[0]._id,
+    entriesByIndex[1]._id,
+    entriesByIndex[2]._id
   ];
 
   try {
@@ -54,15 +34,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Failed to fetch entries by IDs:", error.message);
   }
-
-  console.log("   ");
-  console.log("Fetching multiple entries...");
-  console.log("   ");
-
-  const indexValues = ["新", "漢", "感"];
-
-  const entriesByIndex = await getEntriesByIndexes(collectionName, indexValues);
-  console.log("Fetched entries:", entriesByIndex);
 
   console.log("   ");
   console.log("Fetching entries via search...");
@@ -216,36 +187,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Failed to edit Kanji entry:", error.message);
     // Possibly show a user-friendly message in the UI
-  }
-
-
-  const kanjiToDelete = await getEntryByIndex("kanji", "闇"); 
-  console.log("Fetched Kanji Entry for '闇':", kanjiToDelete);
-
-  console.log("   ");
-  console.log("Testing deleteEntry...");
-  console.log("   ");
-
-  // Example: Retrieve token from localStorage (assuming you store it there after login)
-  const jwtToken = localStorage.getItem("picotan_jwt");
-
-  if (!jwtToken) {
-    console.error("No JWT token found. Please log in first.");
-    return;
-  }
-
-  // Example collection name and document ID (replace with actual values)
-  const collectionName = "kanji";
-  const documentId = kanjiToDelete._id;
-
-  try {
-    // Attempt to delete the entry
-    console.log(`Deleting entry from collection "${collectionName}" with ID "${documentId}"...`);
-    const response = await deleteEntry(collectionName, documentId, jwtToken);
-    console.log("Server response:", response);
-    // Example: { message: "Entry deleted successfully", deletedCount: 1 }
-  } catch (error) {
-    console.error("Failed to delete entry:", error.message);
   }
           */
 });

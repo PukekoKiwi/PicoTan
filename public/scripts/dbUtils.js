@@ -1,31 +1,6 @@
 // Core read operations
 
 /**
- * Fetches a single entry from the database by its ID via the /api/getEntryById endpoint.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {string} id - The ID of the document to fetch.
- * @returns {Promise<object|null>} - The fetched document or null if not found.
- * @throws {Error} if the request fails.
- */
-export async function getEntryById(collectionName, id) {
-  try {
-    const response = await fetch(`/api/getEntryById?collectionName=${collectionName}&id=${id}`, {
-      method: "GET"
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || response.statusText);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to fetch entry by ID:", error);
-    throw error;
-  }
-}
-
-/**
  * Fetches multiple entries from the database by their IDs via the /api/getEntriesByIds endpoint.
  * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
  * @param {Array<string>} ids - An array of document IDs to fetch.
@@ -51,26 +26,6 @@ export async function getEntriesByIds(collectionName, ids) {
   } catch (error) {
     console.error("Failed to fetch entries by IDs:", error);
     throw error;
-  }
-}
-
-
-/**
- * Fetches a single entry from the database via the API.
- * @param {string} collectionName - The collection to search in (e.g., "kanji", "words").
- * @param {string} indexValue - The value to search for (e.g., "漢", "感謝").
- * @returns {Promise<object|null>} - The fetched document or null if not found.
- */
-export async function getEntryByIndex(collectionName, indexValue) {
-  try {
-    const response = await fetch(
-      `/api/getEntryByIndex?collectionName=${collectionName}&indexValue=${encodeURIComponent(indexValue)}`
-    );
-    if (!response.ok) throw new Error(`Error: ${response.statusText}`);
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to get entry by index:", error);
-    return null;
   }
 }
 
@@ -201,37 +156,6 @@ export async function editEntry(collectionName, id, updateData, jwtToken) {
     return await response.json();
   } catch (error) {
     console.error("Failed to edit entry:", error);
-    throw error;
-  }
-}
-
-/**
- * Deletes an entry from the database via the /api/deleteEntry endpoint.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {string} id - The ID of the document to delete.
- * @param {string} jwtToken - The JWT token for authentication.
- * @returns {Promise<object>} - The response JSON from the server.
- * @throws {Error} if the request fails.
- */
-export async function deleteEntry(collectionName, id, jwtToken) {
-  try {
-    const response = await fetch("/api/deleteEntry", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${jwtToken}`
-      },
-      body: JSON.stringify({ collectionName, id })
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error || response.statusText);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error("Failed to delete entry:", error);
     throw error;
   }
 }
