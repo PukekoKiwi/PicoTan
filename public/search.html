@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="description" content="Search page for entries" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
+
   <link rel="icon" href="assets/favicons/pico_neutral.ico" />
   <title>検索 - ピコ鍛</title>
 
@@ -40,7 +40,6 @@
   <main class="search-main">
 
     <section class="search-controls">
-
       <h1 class="search-controls__title">データベースを検索</h1>
       <div class="search-controls__form">
         <label for="search-type">検索モード:</label>
@@ -52,23 +51,21 @@
           <option value="kotowaza">諺</option>
           <option value="sentences">例文</option>
         </select>
-    
+
         <!-- Simple Search -->
         <div id="simple-search" class="search-mode">
           <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
           <button id="search-btn" class="search-controls__button">検索</button>
         </div>
-    
+
         <!-- Advanced Search -->
         <div id="advanced-search" class="search-mode hidden">
-          <!-- Fields dynamically added by JavaScript -->
+          <!-- Dynamically rendered by search.js -->
         </div>
-    
+
         <button id="toggle-advanced" class="search-controls__toggle">詳細検索</button>
       </div>
-
     </section>
-    
 
     <section class="search-results">
       <h2 class="search-results__heading">結果</h2>

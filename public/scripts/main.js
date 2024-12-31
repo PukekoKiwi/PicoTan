@@ -1,235 +1,92 @@
-import { getEntriesByIds, getEntriesByIndexes, getEntriesBySearch, getEntriesByFuzzySearch, addEntry, editEntry, deleteEntry } from "./dbUtils.js";
+// Import all utility functions for testing
+import { 
+  getAllEntries, 
+  getKanjiEntry, 
+  getKanjiEntriesByKankenLevel, 
+  getSentenceEntriesThatContainTheWord, 
+  getKotowazaEntriesThatContainTheKanji, 
+  fuzzySearchWords, 
+  getEntriesBySearch 
+} from "./dbUtils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
+  console.log("Testing read operations...");
 
-  /*
-  console.log("Experimenting with database queries...");
-
-  console.log("   ");
-  console.log("Testing getEntriesByIndexes...");
-  console.log("   ");
-
-  const indexValues = ["新", "漢", "感"];
-
-  const collectionName = "kanji";
-  const entriesByIndex = await getEntriesByIndexes(collectionName, indexValues);
-  console.log("Fetched entries:", entriesByIndex);
-
-  console.log("   ");
-  console.log("Testing getEntriesByIds...");
-  console.log("   ");
-
-  // Fetch multiple entries by their IDs
-  const documentIds = [
-    entriesByIndex[0]._id,
-    entriesByIndex[1]._id,
-    entriesByIndex[2]._id
-  ];
-
+  // Example: Retrieve all entries in the "kanji" collection
   try {
-    // Fetch the entries by their IDs
-    console.log(`Fetching entries from collection "${collectionName}" with IDs:`, documentIds);
-    const entries = await getEntriesByIds(collectionName, documentIds);
-    console.log("Fetched entries:", entries);
+    console.log("Fetching all kanji entries...");
+    const allKanji = await getAllEntries("kanji");
+    console.log("All Kanji Entries:", allKanji);
   } catch (error) {
-    console.error("Failed to fetch entries by IDs:", error.message);
+    console.error("Error fetching all Kanji entries:", error);
   }
 
-  console.log("   ");
-  console.log("Fetching entries via search...");
-  console.log("   ");
-
-  console.log("Fetching entries with on-reading 'カン'");
-  const kanjiWithOnReading = await getEntriesBySearch("kanji", {
-    "readings.on.reading": "カン",
-  });
-  console.log(kanjiWithOnReading);
-
-  console.log("Fetching words with pronunciation 'かんじ'");
-  const wordsWithPronunciation = await getEntriesBySearch("words", {
-    "readings.reading": "かんじ",
-  });
-  console.log(wordsWithPronunciation);
-
-  console.log("Fetching radicals with pronunciation 'さんずい'");
-  const radicalsWithPronunciation = await getEntriesBySearch("radicals", {
-    names: { $regex: "さんずい" },
-  });
-  console.log(radicalsWithPronunciation);
-
-  console.log("Fetching sentences with Kanken Level 4");
-  const sentencesWithKankenLevel = await getEntriesBySearch("sentences", {
-    kanken_level: 4,
-  });
-  console.log(sentencesWithKankenLevel);
-
-  console.log("Fetching words with collocations containing '教育漢字'");
-  const wordsWithCollocations = await getEntriesBySearch("words", {
-    collocations: { $regex: "教育漢字" },
-  });
-  console.log(wordsWithCollocations);
-
-  console.log("   ");
-  console.log("Testing fuzzy search...");
-  console.log("   ");
-
-  // Example 1: Fuzzy search for a word in the "words" collection
+  // Example: Fetch a specific kanji by index
   try {
-    const wordsResults = await getEntriesByFuzzySearch("words", "漢字");
-    console.log("Fuzzy search results for '漢字' in 'words':", wordsResults);
+    console.log("Fetching kanji by index ('新')...");
+    const kanjiEntry = await getKanjiEntry("新");
+    console.log("Kanji Entry for '新':", kanjiEntry);
   } catch (error) {
-    console.error("Error fetching words:", error);
+    console.error("Error fetching Kanji by index:", error);
   }
 
-  // Example 2: Fuzzy search for a meaning in the "kotowaza" collection
+  // Example: Fetch kanji by kanken level
   try {
-    const kotowazaResults = await getEntriesByFuzzySearch("kotowaza", "persevere", "meanings.english");
-    console.log("Fuzzy search results for 'persevere' in 'kotowaza':", kotowazaResults);
+    console.log("Fetching Kanji with Kanken Level 4...");
+    const kankenLevelKanji = await getKanjiEntriesByKankenLevel(4);
+    console.log("Kanji with Kanken Level 4:", kankenLevelKanji);
   } catch (error) {
-    console.error("Error fetching kotowaza:", error);
+    console.error("Error fetching Kanji by Kanken level:", error);
   }
 
-  // Example 3: Fuzzy search for an idiom in the "yojijukugo" collection
+  // Example: Fetch sentences containing a specific word
   try {
-    const yojijukugoResults = await getEntriesByFuzzySearch("yojijukugo", "異口同音");
-    console.log("Fuzzy search results for '異口同音' in 'yojijukugo':", yojijukugoResults);
+    console.log("Fetching sentences that contain the word '漢字'...");
+    const sentencesWithWord = await getSentenceEntriesThatContainTheWord("漢字");
+    console.log("Sentences containing '漢字':", sentencesWithWord);
   } catch (error) {
-    console.error("Error fetching yojijukugo:", error);
+    console.error("Error fetching sentences by word:", error);
   }
 
-  const indexValues = ["新", "漢", "感"];
-
-  const collectionName = "kanji";
-  const entriesByIndex = await getEntriesByIndexes(collectionName, indexValues);
-  console.log("Fetched entries:", entriesByIndex);
-
-  */
-
-  /*
-
-  // Experimenting with adding new entries to the database
-  console.log("   ");
-  console.log("Experimenting with adding new entries...");
-  console.log("   ");
-
-  // Example: Retrieve token from localStorage (assuming you store it there after login)
-  const jwtToken = localStorage.getItem("picotan_jwt");
-
-  // Construct a new Kanji entry for testing
-  const newKanji = {
-    character: "苦",               // required
-    radical: "艹",                 // required
-    stroke_count: 8,
-    readings: {
-      on:  [{ reading: "ク", tags: [] }],
-      kun: [{ reading: "くる", okurigana: "しい", tags: [] }, { reading: "くる", okurigana: "しむ", tags: [] }, { reading: "くる", okurigana: "しめる", tags: [] }, { reading: "にが", okurigana: "い", tags: [] }, { reading: "にが", okurigana: "る", tags: [] }, { reading: "にがな", okurigana: "", tags: ["表外"] }, { reading: "はなは", okurigana: "だ", tags: ["表外"] }]
-    },
-    meanings: [
-      {
-        japanese: "くるしい。くるしむ。なやむ。つらい。また、くるしめる。",
-        english: "Suffering. To suffer. To be distressed. Painful. Also, to cause suffering.",
-      },
-      {
-        japanese: "にがい。にがにがしい。にがみ。五味の一つ。",
-        english: "Bitter. Bitterness. One of the five tastes.",
-      },
-      {
-        japanese: "にがな。キク科の多年草。にがみを持つ。",
-        english: "Nigana, or Ixeridium dentatum. A perennial herb of the Asteraceae family. Has a bitter taste.",
-      },
-      {
-        japanese: "つとめる。はげむ。骨を折る。",
-        english: "To work hard. To strive. To take great pains.",
-      },
-      {
-        japanese: "はなはだ。ひどく。",
-        english: "Very. Extremely.",
-      },
-    ],
-    kanken_level: 8.0,
-    categories: ["常用漢字", "第１水準"],
-    references: [{ source: "漢字辞典オンライン", url: "https://kanji.jitenon.jp/kanji/279" },{ source: "漢字ペディア", url: "https://www.kanjipedia.jp/kanji/0001657600" }],
-    alternate_forms: []
-  };
-
-  // Attempt to insert into "kanji" collection
+  // Example: Fetch proverbs containing a specific kanji
   try {
-    console.log("Sending new Kanji data to server...");
-    const response = await addEntry("kanji", newKanji, jwtToken);
-    console.log("Server response:", response);
-    // e.g. { message: "Entry added successfully", insertedId: "..." }
+    console.log("Fetching Kotowaza that contain the kanji '石'...");
+    const kotowazaWithKanji = await getKotowazaEntriesThatContainTheKanji("石");
+    console.log("Kotowaza containing '石':", kotowazaWithKanji);
   } catch (error) {
-    console.error("Failed to add new Kanji entry:", error.message);
-    // Possibly show a user-friendly message in the UI
+    console.error("Error fetching Kotowaza by kanji:", error);
   }
-    */
- 
-  /*
 
-  // Experimenting with editing existing entries in the database
-  console.log("   ");
-  console.log("Experimenting with appending text to meanings...");
-  console.log("   ");
-
+  // Example: Perform a fuzzy search for words
   try {
-    // Retrieve an existing Kanji entry by its character
-    const kanjiEntry = entriesByIndex[0];
+    console.log("Performing a fuzzy search for words with '漢'...");
+    const fuzzyWords = await fuzzySearchWords("漢");
+    console.log("Words matching '漢':", fuzzyWords);
+  } catch (error) {
+    console.error("Error performing fuzzy search for words:", error);
+  }
 
-    // If the entry doesn't exist, log an error and stop
-    if (!kanjiEntry) {
-      console.error("Kanji entry not found for character '新'.");
-      return;
-    }
-
-    // Extract the ID of the existing entry
-    const kanjiId = kanjiEntry._id;
-
-    // Retrieve token from localStorage (assuming you store it there after login)
-    const jwtToken = localStorage.getItem("picotan_jwt");
-
-    if (!jwtToken) {
-      console.error("No JWT token found. Please log in first.");
-      return;
-    }
-
-    // Clone the existing meanings to avoid direct mutation
-    const updatedMeanings = kanjiEntry.meanings.map((meaning, index) => {
-      // Append "(updated)" or "（更新）" to the first meaning only
-      if (index === 0) {
-        return {
-          japanese: meaning.japanese + "（更新）",
-          english: meaning.english ? meaning.english + " (updated)" : ""
-        };
-      }
-      return meaning; // Keep the rest unchanged
+  // Example: Fetch sentences with Kanken level harder than 5
+  try {
+    console.log("Fetching sentences with Kanken levels harder than 5...");
+    const sentencesHarderThanKankenLevel5 = await getEntriesBySearch("sentences", {
+      kanken_level: { $lt: 5 },
     });
-
-    // Define the updates to apply
-    const updatedData = { meanings: updatedMeanings };
-
-    // Send the update to the server
-    console.log("Sending update to server...");
-    const response = await editEntry("kanji", kanjiId, updatedData, jwtToken);
-
-    // Log the server response
-    console.log("Server response:", response);
-    // Example: { message: "Entry updated successfully", matchedCount: 1, modifiedCount: 1 }
+    console.log("Sentences with Kanken levels harder than 5:", sentencesHarderThanKankenLevel5);
   } catch (error) {
-    console.error("Failed to edit Kanji entry:", error.message);
-    // Possibly show a user-friendly message in the UI
-  }  */
+    console.error("Error fetching sentences with Kanken level harder than 5:", error);
+  }
 
-    /*
-    const entriesByIndex = await getEntriesByIndexes("kanji", ["苦"]);
-    const jwtToken = localStorage.getItem("picotan_jwt");
-    const kanjiId = entriesByIndex[0]._id;
-          
-    try {
-      const deleteResult = await deleteEntry("kanji", kanjiId, jwtToken);
-      console.log("Delete result:", deleteResult);
-      // e.g. { message: "Entry deleted successfully", deletedCount: 1 }
-    } catch (err) {
-      console.error("Failed to delete entry:", err.message);
-    }
-      */
+  // Example: Fetch radicals with one of the readings being 'さんずい'
+  try {
+    console.log("Fetching radicals with the reading 'さんずい'...");
+    const radicalsWithReading = await getEntriesBySearch("radicals", {
+      names: { $elemMatch: { $regex: "さんずい", $options: "i" } },
+    });
+    console.log("Radicals with reading 'さんずい':", radicalsWithReading);
+  } catch (error) {
+    console.error("Error fetching radicals by reading:", error);
+  }
+
+  console.log("Finished testing read operations.");
 });
