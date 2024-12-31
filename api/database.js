@@ -4,168 +4,185 @@ import { indexFieldMap } from "./constants";
 
 // Read operations
 
-/**
- * Retrieves entries by their IDs from the specified collection, preserving the order of the input IDs.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {Array<string>} ids - An array of document IDs to fetch.
- * @returns {Promise<Array<object>>} - An array of matching documents in the same order as the input IDs.
- */
-export async function getEntriesByIds(collectionName, ids) {
+export async function readEntries({ operation, collectionName, ids, indexValues, filters, searchText, path = "*" }) {
   const { db } = await connectMongo();
 
-  // Validate and convert IDs to ObjectId
-  const objectIds = ids.map(id => {
-    if (!ObjectId.isValid(id)) {
-      throw new Error(`Invalid document ID: ${id}`);
+  switch (operation) {
+    /**
+     * ------------------------------------------------------
+     * Get entries by IDs
+     * ------------------------------------------------------
+     */
+    case "getEntriesByIds": {
+      if (!collectionName || !Array.isArray(ids) || ids.length === 0) {
+        throw new Error("Missing or invalid parameters. Provide a collection name and a non-empty array of IDs.");
+      }
+
+      // Validate and convert IDs to ObjectId
+      const objectIds = ids.map((id) => {
+        if (!ObjectId.isValid(id)) {
+          throw new Error(`Invalid document ID: ${id}`);
+        }
+        return new ObjectId(id);
+      });
+
+      // Query the collection
+      const results = await db.collection(collectionName).find({ _id: { $in: objectIds } }).toArray();
+
+      // Sort the results to match the order of the input IDs
+      const resultsById = new Map(results.map((doc) => [doc._id.toString(), doc]));
+      return ids.map((id) => resultsById.get(id) || null); 
     }
-    return new ObjectId(id);
-  });
 
-  // Query the collection
-  const results = await db.collection(collectionName).find({ _id: { $in: objectIds } }).toArray();
+    /**
+     * ------------------------------------------------------
+     * Get entries by indexValues
+     * ------------------------------------------------------
+     */
+    case "getEntriesByIndexes": {
+      if (!collectionName || !Array.isArray(indexValues) || indexValues.length === 0) {
+        throw new Error("Missing or invalid collectionName or indexValues");
+      }
+      const indexField = indexFieldMap[collectionName];
+      if (!indexField) throw new Error(`Invalid collection: ${collectionName}`);
 
-  // Sort the results to match the order of the input IDs
-  const resultsById = new Map(results.map(doc => [doc._id.toString(), doc]));
-  return ids.map(id => resultsById.get(id) || null); // Ensure order and include nulls for missing entries
-}
-
-/**
- * Retrieves entries from a specified collection based on a list of indexed values.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {Array<string>} indexValues - An array of values to search for (e.g., ["漢字", "感謝"]).
- * @returns {Promise<Array<object>>} - An array of matching documents.
- */
-export async function getEntriesByIndexes(collectionName, indexValues) {
-  if (!Array.isArray(indexValues) || indexValues.length === 0) {
-    throw new Error("indexValues must be a non-empty array.");
-  }
-
-  const { db } = await connectMongo();
-  const indexField = indexFieldMap[collectionName]; // Use the map to get the indexed field
-  if (!indexField) throw new Error(`Invalid collection: ${collectionName}`);
-
-  const query = { [indexField]: { $in: indexValues } }; // Use $in for multiple values
-  return db.collection(collectionName).find(query).toArray();
-}
-
-/**
- * Performs a flexible search in a specified collection based on filters.
- * @param {string} collectionName - The name of the collection to search.
- * @param {object} filters - Key-value pairs representing search filters.
- * @returns {Promise<Array<object>>} - An array of matching documents.
- */
-export async function getEntriesBySearch(collectionName, filters) {
-  const { db } = await connectMongo();
-  const query = {};
-
-  // Build the query dynamically based on filters
-  for (const [key, value] of Object.entries(filters)) {
-    if (Array.isArray(value)) {
-      // If the value is an array, use $in for matching
-      query[key] = { $in: value };
-    } else if (typeof value === "string" && value.startsWith("regex:")) {
-      // If the value starts with "regex:", treat it as a regex pattern
-      const regex = new RegExp(value.slice(6), "i"); // Remove "regex:" and create a case-insensitive regex
-      query[key] = regex;
-    } else {
-      // Default equality match
-      query[key] = value;
+      const query = { [indexField]: { $in: indexValues } };
+      return db.collection(collectionName).find(query).toArray();
     }
-  }
 
-  // Perform the search in the specified collection
-  return db.collection(collectionName).find(query).toArray();
-}
+    /**
+     * ------------------------------------------------------
+     * Get entries by Search
+     * ------------------------------------------------------
+     */
+    case "getEntriesBySearch": {
+      if (!collectionName || !filters || typeof filters !== "object") {
+        throw new Error("Invalid or missing parameters for getEntriesBySearch");
+      }
 
-/**
- * Performs a fuzzy search in a specified collection using MongoDB Atlas Search.
- * @param {string} collectionName - The name of the collection to search (e.g., "words", "yojijukugo", "kotowaza").
- * @param {string} searchText - The text to search for (e.g., "漢字", "meaning").
- * @param {string|object} [path="*"] - The field(s) to search in. Default is wildcard "*".
- * @returns {Promise<Array<object>>} - Matching documents sorted by relevance.
- */
-export async function getEntriesByFuzzySearch(collectionName, searchText, path = "*") {
-  const { db } = await connectMongo();
-
-  // Validate supported collections for fuzzy search
-  const supportedCollections = ["words", "yojijukugo", "kotowaza"];
-  if (!supportedCollections.includes(collectionName)) {
-    throw new Error(`Fuzzy search is not supported for collection: ${collectionName}. Supported collections are: ${supportedCollections.join(", ")}`);
-  }
-
-  if (!searchText.trim()) {
-    throw new Error("Search text cannot be empty");
-  }
-
-  // Atlas Search query
-  let query = [
-    {
-      $search: {
-        "index": `${collectionName}_search`,
-        "text": {
-          "query": searchText,
-          "path": {
-            wildcard: "*"
-          }
+      const query = {};
+      for (const [key, value] of Object.entries(filters)) {
+        if (Array.isArray(value)) {
+          query[key] = { $in: value };
+        } else if (typeof value === "string" && value.startsWith("regex:")) {
+          const regex = new RegExp(value.slice(6), "i"); 
+          query[key] = regex;
+        } else {
+          query[key] = value;
         }
       }
+      return db.collection(collectionName).find(query).toArray();
     }
-  ];
 
-  // Changes the path to a specific field if provided
-  if (path !== "*") {
-    query[0].$search.text.path = path;
+    /**
+     * ------------------------------------------------------
+     * Get entries by Fuzzy Search
+     * ------------------------------------------------------
+     */
+    case "getEntriesByFuzzySearch": {
+      if (!collectionName || !searchText) {
+        throw new Error("Missing required parameters: collectionName or searchText");
+      }
+
+      const supportedCollections = ["words", "yojijukugo", "kotowaza"];
+      if (!supportedCollections.includes(collectionName)) {
+        throw new Error(
+          `Fuzzy search is not supported for collection: ${collectionName}.` +
+          ` Supported collections are: ${supportedCollections.join(", ")}`
+        );
+      }
+
+      if (!searchText.trim()) {
+        throw new Error("Search text cannot be empty");
+      }
+
+      // Build Atlas Search pipeline
+      const pipeline = [
+        {
+          $search: {
+            index: `${collectionName}_search`,
+            text: {
+              query: searchText,
+              path: {
+                wildcard: "*",
+              },
+            },
+          },
+        },
+      ];
+
+      // If a specific path is provided, override the wildcard path
+      if (path !== "*") {
+        pipeline[0].$search.text.path = path;
+      }
+
+      return db.collection(collectionName).aggregate(pipeline).toArray();
+    }
+
+    default:
+      throw new Error(`Unknown operation: ${operation}`);
   }
-
-  return db.collection(collectionName).aggregate(query).toArray();
 }
 
 // Write operations
 
 /**
- * Adds a new document to the specified collection.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {object} newEntry - The document to be added.
- * @returns {Promise<object>} - The result of the insert operation.
+ * @param {object} params
+ * @param {string} params.operation - "addEntry" | "editEntry" | "deleteEntry"
+ * @param {string} params.collectionName - The name of the collection to act on
+ * @param {object} [params.newEntry] - For "addEntry": the document to be inserted
+ * @param {string} [params.id] - For "editEntry" or "deleteEntry": the _id of the document
+ * @param {object} [params.updateData] - For "editEntry": the fields to update
+ * @returns {Promise<object>} - Depending on operation, returns insertion result, update result, or deletion result
  */
-export async function addEntry(collectionName, newEntry) {
+export async function writeEntries({ operation, collectionName, newEntry, id, updateData }) {
   const { db } = await connectMongo();
 
-  // Validate collection name
-  if (!Object.keys(indexFieldMap).includes(collectionName)) {
-    throw new Error(`Invalid collection: ${collectionName}`);
+  switch (operation) {
+    case "addEntry": {
+      // Validate collection name
+      if (!Object.keys(indexFieldMap).includes(collectionName)) {
+        throw new Error(`Invalid collection: ${collectionName}`);
+      }
+      if (!newEntry) {
+        throw new Error("Missing newEntry for addEntry operation");
+      }
+      const result = await db.collection(collectionName).insertOne(newEntry);
+      return { insertedId: result.insertedId };
+    }
+
+    case "editEntry": {
+      if (!id || !updateData) {
+        throw new Error("Missing id or updateData for editEntry operation");
+      }
+      if (!ObjectId.isValid(id)) {
+        throw new Error(`Invalid document ID: ${id}`);
+      }
+      const result = await db
+        .collection(collectionName)
+        .updateOne({ _id: new ObjectId(id) }, { $set: updateData });
+      return {
+        matchedCount: result.matchedCount,
+        modifiedCount: result.modifiedCount,
+      };
+    }
+
+    case "deleteEntry": {
+      if (!id) {
+        throw new Error("Missing id for deleteEntry operation");
+      }
+      if (!ObjectId.isValid(id)) {
+        throw new Error(`Invalid document ID: ${id}`);
+      }
+      const result = await db
+        .collection(collectionName)
+        .deleteOne({ _id: new ObjectId(id) });
+      return {
+        deletedCount: result.deletedCount,
+      };
+    }
+
+    default:
+      throw new Error(`Unknown write operation: ${operation}`);
   }
-
-  // Insert the new document
-  const result = await db.collection(collectionName).insertOne(newEntry);
-  return result;
-}
-
-
-/**
- * Edits an existing document in the specified collection.
- * @param {string} collectionName - The name of the collection (e.g., "kanji", "words").
- * @param {string} id - The _id of the document to update.
- * @param {object} updateData - The fields to update.
- * @returns {Promise<object>} - The result of the update operation.
- */
-export async function editEntry(collectionName, id, updateData) {
-  const { db } = await connectMongo();
-
-  // Validate the id format
-  if (!ObjectId.isValid(id)) {
-    throw new Error(`Invalid document ID: ${id}`);
-  }
-
-  // Update the document
-  const result = await db.collection(collectionName).updateOne(
-    { _id: new ObjectId(id) }, // Match by ID
-    { $set: updateData }       // Set only the fields in updateData
-  );
-
-  if (result.matchedCount === 0) {
-    throw new Error(`No document found with _id: ${id}`);
-  }
-
-  return result;
 }

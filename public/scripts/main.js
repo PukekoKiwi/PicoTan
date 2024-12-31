@@ -1,7 +1,7 @@
-import { getEntriesByIds, getEntriesByIndexes, getEntriesBySearch, getEntriesByFuzzySearch, addEntry, editEntry } from "./dbUtils.js";
+import { getEntriesByIds, getEntriesByIndexes, getEntriesBySearch, getEntriesByFuzzySearch, addEntry, editEntry, deleteEntry } from "./dbUtils.js";
 
 document.addEventListener("DOMContentLoaded", async () => {
-  
+
   /*
   console.log("Experimenting with database queries...");
 
@@ -97,6 +97,16 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Error fetching yojijukugo:", error);
   }
 
+  const indexValues = ["新", "漢", "感"];
+
+  const collectionName = "kanji";
+  const entriesByIndex = await getEntriesByIndexes(collectionName, indexValues);
+  console.log("Fetched entries:", entriesByIndex);
+
+  */
+
+  /*
+
   // Experimenting with adding new entries to the database
   console.log("   ");
   console.log("Experimenting with adding new entries...");
@@ -107,21 +117,38 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // Construct a new Kanji entry for testing
   const newKanji = {
-    character: "卜",               // required
-    radical: "卜",                 // required
-    stroke_count: { "$numberInt": "2" }, // or { "$numberDouble": "13.0" }
+    character: "苦",               // required
+    radical: "艹",                 // required
+    stroke_count: 8,
     readings: {
-      on:  [{ reading: "ボク", tags: [] }, { reading: "ホク", tags: [] }],
-      kun: [{ reading: "うらな", okurigana: "う", tags: [] }, { reading: "うらな", okurigana: "い", tags: [] }]
+      on:  [{ reading: "ク", tags: [] }],
+      kun: [{ reading: "くる", okurigana: "しい", tags: [] }, { reading: "くる", okurigana: "しむ", tags: [] }, { reading: "くる", okurigana: "しめる", tags: [] }, { reading: "にが", okurigana: "い", tags: [] }, { reading: "にが", okurigana: "る", tags: [] }, { reading: "にがな", okurigana: "", tags: ["表外"] }, { reading: "はなは", okurigana: "だ", tags: ["表外"] }]
     },
-    meanings: {
-      japanese: ["うらない。うらなう。物事の吉凶を判断する。", "選ぶ。選定する。"],
-      english: ["Fortune-telling. To judge the fortune or misfortune of events.", "To select. To choose or make a selection."]
-    },
-    kanken_level: { "$numberDouble": "1.5" },
-    categories: ["第１水準"],
-    references: [{ source: "漢字辞典オンライン", url: "https://example.com" },{ source: "漢字ペディア", url: "https://example.com" }],
-    // optional fields
+    meanings: [
+      {
+        japanese: "くるしい。くるしむ。なやむ。つらい。また、くるしめる。",
+        english: "Suffering. To suffer. To be distressed. Painful. Also, to cause suffering.",
+      },
+      {
+        japanese: "にがい。にがにがしい。にがみ。五味の一つ。",
+        english: "Bitter. Bitterness. One of the five tastes.",
+      },
+      {
+        japanese: "にがな。キク科の多年草。にがみを持つ。",
+        english: "Nigana, or Ixeridium dentatum. A perennial herb of the Asteraceae family. Has a bitter taste.",
+      },
+      {
+        japanese: "つとめる。はげむ。骨を折る。",
+        english: "To work hard. To strive. To take great pains.",
+      },
+      {
+        japanese: "はなはだ。ひどく。",
+        english: "Very. Extremely.",
+      },
+    ],
+    kanken_level: 8.0,
+    categories: ["常用漢字", "第１水準"],
+    references: [{ source: "漢字辞典オンライン", url: "https://kanji.jitenon.jp/kanji/279" },{ source: "漢字ペディア", url: "https://www.kanjipedia.jp/kanji/0001657600" }],
     alternate_forms: []
   };
 
@@ -135,6 +162,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Failed to add new Kanji entry:", error.message);
     // Possibly show a user-friendly message in the UI
   }
+    */
+ 
+  /*
 
   // Experimenting with editing existing entries in the database
   console.log("   ");
@@ -143,7 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     // Retrieve an existing Kanji entry by its character
-    const kanjiEntry = await getEntryByIndex("kanji", "新");
+    const kanjiEntry = entriesByIndex[0];
 
     // If the entry doesn't exist, log an error and stop
     if (!kanjiEntry) {
@@ -187,6 +217,19 @@ document.addEventListener("DOMContentLoaded", async () => {
   } catch (error) {
     console.error("Failed to edit Kanji entry:", error.message);
     // Possibly show a user-friendly message in the UI
-  }
-          */
+  }  */
+
+    /*
+    const entriesByIndex = await getEntriesByIndexes("kanji", ["苦"]);
+    const jwtToken = localStorage.getItem("picotan_jwt");
+    const kanjiId = entriesByIndex[0]._id;
+          
+    try {
+      const deleteResult = await deleteEntry("kanji", kanjiId, jwtToken);
+      console.log("Delete result:", deleteResult);
+      // e.g. { message: "Entry deleted successfully", deletedCount: 1 }
+    } catch (err) {
+      console.error("Failed to delete entry:", err.message);
+    }
+      */
 });
