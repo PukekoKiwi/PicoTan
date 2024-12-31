@@ -1,6 +1,13 @@
 import { ObjectId } from "mongodb";
 import connectMongo from "./connectMongo";
-import { indexFieldMap } from "./constants";
+
+const indexFieldMap = {
+  radicals: "character",  // Indexed field for the "radicals" collection
+  kanji: "character",     // Indexed field for the "kanji" collection
+  words: "word",          // Indexed field for the "words" collection
+  yojijukugo: "idiom",    // Indexed field for the "yojijukugo" collection
+  kotowaza: "proverb",    // Indexed field for the "kotowaza" collection
+};
 
 // Read operations
 
