@@ -66,18 +66,28 @@ export async function readEntries({ operation, collectionName, ids, indexValues,
       if (!collectionName || !filters || typeof filters !== "object") {
         throw new Error("Invalid or missing parameters for getEntriesBySearch");
       }
-
+    
       const query = {};
       for (const [key, value] of Object.entries(filters)) {
-        if (Array.isArray(value)) {
+        // 1) If it's an operator like $or, $and, etc., use it verbatim
+        if (key.startsWith("$")) {
+          query[key] = value;
+        }
+        // 2) If it's an array but *not* a special operator, do $in
+        else if (Array.isArray(value)) {
           query[key] = { $in: value };
-        } else if (typeof value === "string" && value.startsWith("regex:")) {
-          const regex = new RegExp(value.slice(6), "i"); 
+        }
+        // 3) If it's "regex:...", handle that
+        else if (typeof value === "string" && value.startsWith("regex:")) {
+          const regex = new RegExp(value.slice(6), "i");
           query[key] = regex;
-        } else {
+        }
+        // 4) Otherwise, just assign the value
+        else {
           query[key] = value;
         }
       }
+    
       return db.collection(collectionName).find(query).toArray();
     }
 

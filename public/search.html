@@ -10,6 +10,7 @@
 
   <!--Styling-->
   <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/search.css" />
 
   <!-- Sitewide Scripts -->
   <script type="module" src="scripts/logout.js"></script>
@@ -38,9 +39,9 @@
   </header>
 
   <main class="search-main">
-
     <section class="search-controls">
       <h1 class="search-controls__title">データベースを検索</h1>
+
       <div class="search-controls__form">
         <label for="search-type">検索モード:</label>
         <select id="search-type" class="search-controls__select">
@@ -54,16 +55,22 @@
 
         <!-- Simple Search -->
         <div id="simple-search" class="search-mode">
-          <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
-          <button id="search-btn" class="search-controls__button">検索</button>
+          <input
+            type="text"
+            id="search-input"
+            class="search-controls__input"
+            placeholder="入力待ち..."
+          />
         </div>
 
         <!-- Advanced Search -->
         <div id="advanced-search" class="search-mode hidden">
-          <!-- Dynamically rendered by search.js -->
+          <!-- Dynamically rendered fields go here -->
         </div>
 
         <button id="toggle-advanced" class="search-controls__toggle">詳細検索</button>
+
+        <button id="search-btn" class="search-controls__button">検索</button>
       </div>
     </section>
 
@@ -73,7 +80,6 @@
         <!-- Dynamically populated by search.js -->
       </div>
     </section>
-
   </main>
 
   <footer class="site-footer">

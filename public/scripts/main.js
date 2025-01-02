@@ -9,6 +9,7 @@ import {
   getEntriesBySearch 
 } from "./dbUtils.js";
 
+/*
 document.addEventListener("DOMContentLoaded", async () => {
   console.log("Testing read operations...");
 
@@ -90,3 +91,4 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   console.log("Finished testing read operations.");
 });
+*/

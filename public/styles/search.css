@@ -1,0 +1,64 @@
+/* search.css */
+
+/* Basic styling example, adapt as you like */
+
+/* Hide elements with the .hidden class */
+.hidden {
+    display: none;
+  }
+  
+  .search-main {
+    padding: 1rem;
+  }
+  
+  .search-controls {
+    margin-bottom: 1rem;
+  }
+  
+  .search-controls__title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .search-controls__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  
+  .search-controls__input {
+    padding: 0.5rem;
+    font-size: 1rem;
+  }
+  
+  .search-controls__toggle, .search-controls__button {
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+  
+  .search-results {
+    margin-top: 1rem;
+  }
+  
+  .search-results__heading {
+    font-size: 1.25rem;
+  }
+  
+  .search-results__container {
+    margin-top: 0.5rem;
+    background-color: #fafafa;
+    padding: 1rem;
+    border: 1px solid #ccc;
+  }
+  
+  .search-results__container ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .search-results__container li {
+    margin-bottom: 0.5rem;
+    white-space: pre-wrap; /* so JSON can wrap nicely */
+  }
+  

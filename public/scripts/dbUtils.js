@@ -177,13 +177,71 @@ export async function deleteKanji(id, jwtToken) {
 }
 
 // RADICALS
+/**
+ * Fetches a single radical entry that matches `indexValue` in either:
+ * - the main character (e.g. 人)
+ * - the alternates array (亻, 𠆢, etc.)
+ * - the names array (e.g. にんべん, ひとがしら, etc.)
+ * 
+ * @param {string} indexValue - e.g. "亻" or "にんべん"
+ * @returns {object|null} The matched radical doc, or null if none found.
+ */
 export async function getRadicalEntry(indexValue) {
-  return getEntryByIndex("radicals", indexValue);
+  try {
+    const filter = {
+      $or: [
+        { character: indexValue },
+        { alternates: indexValue },  // exact match in alternates array
+        { names: { $regex: indexValue, $options: "i" } }  // partial match for names
+      ]
+    };
+
+    const results = await getEntriesBySearch("radicals", filter);
+
+    return results.length > 0 ? results[0] : null;
+  } catch (error) {
+    console.error("Error in getRadicalEntry:", error);
+    throw error;
+  }
 }
 
+/**
+ * Fetches multiple radical entries by an array of possible forms.
+ * e.g. ["亻", "氵"] => returns all radical docs for which character or alternates
+ * matches "亻" or "氵" or the doc’s names array matches them partially.
+ * 
+ * @param {string[]} indexValues
+ * @returns {object[]} array of matched radical docs
+ */
 export async function getRadicalEntries(indexValues) {
-  return getEntriesByIndexes("radicals", indexValues);
+  try {
+    // Build an $or array that matches if *any* of the indexValues appear 
+    // in character, alternates, or partial match in names.
+    const orClauses = indexValues.map(val => ({
+      $or: [
+        { character: val },
+        { alternates: val },
+        { names: { $regex: val, $options: "i" } }
+      ]
+    }));
+
+    // If you want them to match ANY of those forms (logical OR across the entire array),
+    // you can do something like:
+    const filter = { $or: orClauses };
+
+    // e.g. if indexValues = ["亻", "にんべん"],
+    // then filter.$or = [
+    //   { $or: [ { character: "亻" }, { alternates: "亻" }, { names: /亻/i } ] },
+    //   { $or: [ { character: "にんべん" }, { alternates: "にんべん" }, { names: /にんべん/i } ] }
+    // ]
+
+    return await getEntriesBySearch("radicals", filter);
+  } catch (error) {
+    console.error("Error in getRadicalEntries:", error);
+    throw error;
+  }
 }
+
 
 export async function getRadicalEntriesThatMatch(filters) {
   return getEntriesBySearch("radicals", filters);
