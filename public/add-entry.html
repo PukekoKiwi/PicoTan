@@ -2,20 +2,27 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="description" content="Add new entry" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" href="assets/favicons/pico_neutral.ico" />
+  <meta name="description" content="ピコ鍛 - 新しい項目をピコっと追加！" />
+  <meta property="og:title" content="ピコ鍛 - 項目追加" />
+  <meta property="og:description" content="新しい項目をピコっと追加！" />
+  <!-- <meta property="og:image" content="" /> -->
+  <!-- <meta property="og:type" content="website" /> -->
+
+  <link rel="icon" href="assets/favicons/picotan_neutral.ico" />
   <title>項目追加 - ピコ鍛</title>
 
   <!-- Styling -->
   <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/add-entry.css" />
 
   <!-- Sitewide Scripts -->
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
 
   <!-- Page-Specific Scripts-->
+  <script type="module" src="scripts/addEntry.js"></script>
 </head>
 <body>
 
@@ -40,23 +47,25 @@
   <main class="add-entry-main">
     <section class="add-entry-controls">
       <h1 class="add-entry-controls__title">新項目を追加</h1>
+
       <div class="add-entry-controls__form">
-        <label for="entry-type">種類:</label>
+        <label for="entry-type" class="required">種類:</label>
         <select id="entry-type" class="add-entry-controls__select">
           <option value="kanji">漢字</option>
           <option value="radical">部首</option>
           <option value="word">言葉</option>
-          <option value="example">例文</option>
-          <option value="idiom">四字熟語</option>
+          <option value="sentence">例文</option>
+          <option value="yojijukugo">四字熟語</option>
+          <option value="kotowaza">諺</option>
         </select>
-
-        <!-- The following sections can be shown/hidden dynamically based on 'entry-type' -->
-        <div id="entry-fields" class="add-entry-controls__fields">
-          <!-- e.g., fields for adding a new kanji (character, readings, meaning, etc.) -->
-        </div>
-
-        <button id="save-btn" class="add-entry-controls__button">ピコっと登録！</button>
       </div>
+
+      <!-- The following section is dynamically populated with fields for each type -->
+      <form id="entry-fields" class="add-entry-controls__fields">
+        <!-- Dynamic fields go here -->
+      </form>
+
+      <button id="save-btn" class="add-entry-controls__button">ピコっと登録！</button>
     </section>
 
     <section class="add-entry-output">
