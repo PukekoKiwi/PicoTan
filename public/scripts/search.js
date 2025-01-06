@@ -141,14 +141,33 @@ async function handleSimpleSearch() {
 
 /**
  * Simple search logic for radicals:
- * We process each character in the input:
- *  - If it's a recognized radical, fetch that doc.
- *  - Else, assume it's Kanji, fetch its doc => from that doc, get .radical => fetch that radical doc.
- * Then combine (union) all results.
+ *  - If the entire input is only kana, convert to hiragana and search by names array.
+ *  - Else, for each character in the input:
+ *      (a) If it's a recognized radical in kankenRadicalsSet, fetch that doc directly.
+ *      (b) Otherwise, assume it's a Kanji => get that Kanji doc => from doc.radical => fetch the radical doc.
  */
 async function handleSimpleRadicalSearch(input) {
+  // Trim just in case
+  input = input.trim();
   const unionResults = [];
 
+  // 1) If the entire input is only kana (hiragana or katakana)
+  if (isKana(input)) {
+    // Convert to hiragana
+    const hiragana = toHiragana(input);
+
+    // Search radical docs by name match
+    // e.g. if user typed "さんずい" => we match "さんずい" in names
+    // Use a case-insensitive, partial match:
+    const radResults = await getRadicalEntriesThatMatch({
+      names: { $regex: hiragana, $options: "i" }
+    });
+
+    unionResults.push(...radResults);
+    return unionResults; // We can return right away, or keep going if you prefer a combined approach
+  }
+
+  // 2) Otherwise, fall back to existing character-by-character logic
   for (const char of input) {
     if (kankenRadicalsSet.has(char)) {
       // Directly fetch the doc for this radical
@@ -160,8 +179,9 @@ async function handleSimpleRadicalSearch(input) {
         ]
       });
       unionResults.push(...radResults);
+
     } else {
-      // Assume it's Kanji => get the doc => from doc.radic => fetch that radical
+      // Assume it's Kanji => get the Kanji doc => from that doc, get .radical => fetch that radical doc
       const kanjiMatches = await getKanjiEntriesThatMatch({ character: char });
       if (kanjiMatches.length > 0) {
         const radChar = kanjiMatches[0].radical;
@@ -302,7 +322,8 @@ function renderAdvancedSearchFields() {
       break;
 
     case "words":
-      wrapper.appendChild(createField("wordWildcard", "ワイルドカード (例: 感*)"));
+      wrapper.appendChild(createField("wordWildcard", "単語 (例: 感*)"));
+      wrapper.appendChild(createField("readingWildcard", "読み (例: かん*)"));
       wrapper.appendChild(createField("kanken_level", "漢検級"));
       break;
 
@@ -464,26 +485,49 @@ async function advancedKanjiSearch({ character, onyomi, kunyomi, meaning, radica
   }
 }
 
-async function advancedWordsSearch({ wordWildcard, kanken_level }) {
-  let results = [];
+async function advancedWordsSearch({ wordWildcard, readingWildcard, kanken_level }) {
+  // Build a filter with $and
+  const filter = { $and: [] };
+
+  // 1) Word wildcard
   if (wordWildcard) {
-    const regex = convertWildcardToRegex(wordWildcard);
-    results = await getWordEntriesThatMatch({
-      word: { $regex: regex, $options: "i" }
+    const wordRegex = convertWildcardToRegex(wordWildcard); 
+    // e.g. "*感*" => "^.*感.*$" => matches "感じる", "感謝", "共感", etc.
+    filter.$and.push({
+      word: { $regex: wordRegex, $options: "i" }
     });
-  } else {
-    results = await getWordEntriesThatMatch({});
   }
 
+  // 2) Reading wildcard
+  if (readingWildcard) {
+    const readingRegex = convertWildcardToRegex(readingWildcard);
+    // We search inside the array of readings: "readings.reading"
+    // e.g. "*かん*" => "^.*かん.*$" => matches "かんじる", "かんしゃ", "きょうかん", etc.
+    filter.$and.push({
+      "readings.reading": { $regex: readingRegex, $options: "i" }
+    });
+  }
+
+  // 3) Kanken level
   if (kanken_level) {
     const levelNum = parseInt(kanken_level, 10);
-    // If it's numeric, we filter. Otherwise ignore
     if (!isNaN(levelNum)) {
-      results = results.filter(r => r.kanken_level === levelNum);
+      filter.$and.push({ kanken_level: levelNum });
     }
   }
-  return results;
+
+  // If user didn’t fill in *any* fields, you can either:
+  //  - return everything (pass an empty object)
+  //  - or prompt them to enter something
+  if (filter.$and.length === 0) {
+    // Return *everything* or handle differently:
+    // e.g. return getWordEntriesThatMatch({});
+    return [];
+  } else {
+    return getWordEntriesThatMatch(filter);
+  }
 }
+
 
 async function advancedYojijukugoSearch({ idiomWildcard, kanken_level }) {
   let results = [];
