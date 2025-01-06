@@ -12,7 +12,7 @@ import {
   getKotowazaEntriesThatMatch,
   getSentenceEntriesThatMatch,
   getSentenceEntriesThatContainTheWord
-} from "./dbUtils.js";
+} from "./helpers/dbUtils.js";
 
 // DOM references
 const searchTypeSelect = document.getElementById("search-type");
