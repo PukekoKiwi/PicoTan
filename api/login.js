@@ -24,7 +24,7 @@ export default async (req, res) => {
   }
 
   // Generate a JWT
-  const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: "7d" });
+  const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: "90d" });
 
   res.status(200).json({ token });
 };

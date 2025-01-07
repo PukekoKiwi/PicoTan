@@ -1,36 +1,49 @@
-// Wait for the DOM to fully load
 document.addEventListener("DOMContentLoaded", () => {
-    const logoutItem = document.querySelector(".navigation__item--logout"); // Target the list item
-    const logoutButton = document.querySelector("#logoutButton"); // Target the logout button inside the list item
-  
-    // Check if the user is logged in (JWT exists)
-    const token = localStorage.getItem("picotan_jwt");
-  
-    // Show the logout list item only if the token exists
-    if (token && logoutItem) {
-      logoutItem.style.display = "block"; // Reset to default display (e.g., block or inline-block)
-    } else if (logoutItem) {
-      logoutItem.style.display = "none"; // Ensure it's hidden if no token
-    }
-  
-    // If the logout button exists, attach a click event listener
-    if (logoutButton) {
-      logoutButton.addEventListener("click", (event) => {
-        event.preventDefault(); // Prevent default link behavior
-  
-        // Change button text to "ログアウト中..."
-        logoutButton.textContent = "ログアウト中...";
-        logoutButton.style.pointerEvents = "none"; // Disable further clicks
-        logoutButton.style.opacity = "0.6"; // Visual feedback
-  
-        // Remove the JWT from localStorage
-        localStorage.removeItem("picotan_jwt");
+  handleExpiredToken(); // Check for expired token on page load
 
-        // Redirect to the login page after a short delay
-        setTimeout(() => {
-            window.location.href = "login.html";
-        }, 200);
-      });
-    }
-  });
-  
+  const logoutItem = document.querySelector(".navigation__item--logout");
+  const logoutButton = document.querySelector("#logoutButton");
+
+  // Show or hide logout item based on token existence
+  const token = localStorage.getItem("picotan_jwt");
+  if (token && logoutItem) {
+    logoutItem.style.display = "block";
+  } else if (logoutItem) {
+    logoutItem.style.display = "none";
+  }
+
+  // Attach logout functionality
+  if (logoutButton) {
+    logoutButton.addEventListener("click", (event) => {
+      event.preventDefault();
+      logoutButton.textContent = "ログアウト中...";
+      logoutButton.style.pointerEvents = "none";
+      logoutButton.style.opacity = "0.6";
+      localStorage.removeItem("picotan_jwt");
+      setTimeout(() => {
+        window.location.href = "login.html";
+      }, 200);
+    });
+  }
+});
+
+// Log the user out if the token is expired
+function handleExpiredToken() {
+  const token = localStorage.getItem("picotan_jwt");
+  if (token && isTokenExpired(token)) {
+    console.log("Token expired. Logging out...");
+    localStorage.removeItem("picotan_jwt");
+    window.location.href = "login.html"; // Redirect to login page
+  }
+}
+
+function isTokenExpired(token) {
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1])); // Decode the payload
+    const expirationTime = payload.exp * 1000; // Convert exp to milliseconds
+    return Date.now() > expirationTime; // Compare with the current time
+  } catch (e) {
+    console.error("Error decoding token:", e);
+    return true; // Assume expired if decoding fails
+  }
+}
