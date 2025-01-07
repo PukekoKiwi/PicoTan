@@ -7,7 +7,7 @@ import {
   getKotowazaEntriesThatContainTheKanji, 
   fuzzySearchWords, 
   getEntriesBySearch 
-} from "./dbUtils.js";
+} from "./helpers/dbUtils.js";
 
 /*
 document.addEventListener("DOMContentLoaded", async () => {

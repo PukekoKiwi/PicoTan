@@ -2,6 +2,9 @@
  * Imports for the various field-creation functions
  * and other utilities. Update paths as needed.
  */
+import TinySegmenter from "../../libs/tiny-segmenter.js";
+import { getObjectArrayValues, getValue, getMinKankenLevelForKanji, autoDetectKankenLevel, extractKanji } from "./formUtils.js";
+
 import {
     createTextField,
     createArrayField,
@@ -235,6 +238,9 @@ import {
         inputType: "text",
       })
     );
+
+    const wordInput = document.getElementById("word_text");
+    wordInput.addEventListener("blur", handleWordTextChange);
   
     // Furigana array
     entryFieldsContainer.appendChild(
@@ -385,6 +391,7 @@ import {
    * @param {HTMLElement} entryFieldsContainer
    */
   export function renderSentenceForm(entryFieldsContainer) {
+    // Create sentence text input
     entryFieldsContainer.appendChild(
       createTextField({
         id: "sentence_text",
@@ -394,17 +401,48 @@ import {
       })
     );
   
+    // Create sentence words array field
     entryFieldsContainer.appendChild(
-      createArrayField({
+      createObjectArrayField({
         containerId: "sentence_words",
-        labelText: "例文中の単語（必須）",
-        minItems: 1,
-        placeholder: "単語",
+        labelText: "例文中の単語（表層形＋辞書形, 任意）",
         addButtonLabel: "単語を追加",
-        isRequiredArray: true,
+        minItems: 0,
+        fields: [
+          {
+            subId: "surfaceForm",
+            label: "文中形",
+            placeholder: "例：食べて",
+            required: false,
+          },
+          {
+            subId: "defaultForm",
+            label: "辞書形 / 原形",
+            placeholder: "例：食べる",
+            required: false,
+          },
+        ],
       })
     );
   
+    // Attach event listener to the sentence text input
+    const sentenceInput = document.getElementById("sentence_text");
+    sentenceInput.addEventListener("input", () => {
+      const sentence = sentenceInput.value.trim();
+      if (sentence) {
+        const tokens = tokenizeSentence(sentence);
+        updateSentenceWords(tokens, "sentence_words");
+      }
+    });
+
+    sentenceInput.addEventListener("blur", handleSentenceOrWordsChange);
+  
+    // If you’re using object-array for words...
+    const wordsContainer = document.getElementById("sentence_words");
+    // Some event to say "when user finishes editing words"
+    wordsContainer.addEventListener("blur", handleSentenceOrWordsChange, true); 
+  
+    // Other fields...
     entryFieldsContainer.appendChild(
       createTextField({
         id: "sentence_explanation",
@@ -459,6 +497,9 @@ import {
         inputType: "text",
       })
     );
+
+    const idiomInput = document.getElementById("yoji_idiom");
+    idiomInput.addEventListener("blur", handleYojiIdiomChange);
   
     // Furigana array
     entryFieldsContainer.appendChild(
@@ -603,6 +644,9 @@ import {
         inputType: "text",
       })
     );
+
+    const proverbInput = document.getElementById("kotowaza_proverb");
+    proverbInput.addEventListener("blur", handleKotowazaChange);
   
     // Furigana array
     entryFieldsContainer.appendChild(
@@ -711,3 +755,144 @@ import {
     );
   }
   
+  /**
+ * Tokenize a sentence and filter tokens containing Kanji.
+ * @param {string} sentence - The input sentence.
+ * @returns {Array} - Array of tokens containing Kanji.
+ */
+function tokenizeSentence(sentence) {
+  const segmenter = new TinySegmenter();
+  const tokens = segmenter.segment(sentence);
+
+  // Filter tokens that contain at least one Kanji
+  const kanjiRegex = /[\u4E00-\u9FFF]/; // Kanji Unicode range
+  return tokens.filter((token) => kanjiRegex.test(token));
+}
+
+/**
+ * Update the sentence_words array field with tokens.
+ * @param {Array} tokens - The list of tokens containing Kanji.
+ * @param {string} containerId - The ID of the array field container.
+ */
+function updateSentenceWords(tokens, containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+
+  // Clear the container contents
+  container.innerHTML = "";
+
+  // Create object-array-row based on tokens
+  tokens.forEach((token) => {
+    // Create a row
+    const row = document.createElement("div");
+    row.classList.add("object-array-row");
+
+    // Label + input for surface form
+    const surfaceWrapper = document.createElement("div");
+    surfaceWrapper.classList.add("object-field");
+    const surfaceLabel = document.createElement("label");
+    surfaceLabel.textContent = "文中形";
+    surfaceLabel.classList.add("object-field-label");
+    surfaceWrapper.appendChild(surfaceLabel);
+
+    const surfaceInput = document.createElement("input");
+    surfaceInput.type = "text";
+    surfaceInput.classList.add("form-input");
+    // Set data-subid so that it can be picked up later with getObjectArrayValues
+    surfaceInput.dataset.subid = "surfaceForm";
+    surfaceInput.value = token; // put the result of tokenizeSentence
+    surfaceWrapper.appendChild(surfaceInput);
+
+    row.appendChild(surfaceWrapper);
+
+    // Label + input for dictionary form
+    const defaultWrapper = document.createElement("div");
+    defaultWrapper.classList.add("object-field");
+    const defaultLabel = document.createElement("label");
+    defaultLabel.textContent = "辞書形";
+    defaultLabel.classList.add("object-field-label");
+    defaultWrapper.appendChild(defaultLabel);
+
+    const defaultInput = document.createElement("input");
+    defaultInput.type = "text";
+    defaultInput.classList.add("form-input");
+    defaultInput.dataset.subid = "defaultForm";
+    defaultInput.placeholder = "例：食べる";
+    defaultWrapper.appendChild(defaultInput);
+
+    row.appendChild(defaultWrapper);
+
+    // Delete button
+    const removeBtn = document.createElement("button");
+    removeBtn.type = "button";
+    removeBtn.textContent = "削除";
+    removeBtn.classList.add("object-array-remove-btn");
+    removeBtn.addEventListener("click", () => {
+      container.removeChild(row);
+    });
+    row.appendChild(removeBtn);
+
+    container.appendChild(row);
+  });
+}
+
+async function handleWordTextChange() {
+  const wordText = getValue("#word_text");
+  const kanjiSet = extractKanji(wordText);
+  const minLevel = await getMinKankenLevelForKanji([...kanjiSet]);
+  const wordKankenSelect = document.getElementById("word_kanken_level");
+  if (wordKankenSelect) {
+    wordKankenSelect.value = minLevel;
+  }
+}
+
+async function handleYojiIdiomChange() {
+  const idiom = getValue("#yoji_idiom");
+  const kanjiSet = extractKanji(idiom);
+  const minLevel = await getMinKankenLevelForKanji([...kanjiSet]);
+  const yojiKankenSelect = document.getElementById("yoji_kanken_level");
+  if (yojiKankenSelect) {
+    yojiKankenSelect.value = minLevel;
+  }
+}
+
+async function handleKotowazaChange() {
+  // 1) Get the proverb text
+  const proverb = getValue("#kotowaza_proverb");
+  // 2) Extract kanji
+  const kanjiSet = extractKanji(proverb);
+
+  // 3) Single call to getMinKankenLevelForKanji
+  const minLevel = await getMinKankenLevelForKanji([...kanjiSet]);
+
+  // 4) Update the <select>
+  const proverbKankenSelect = document.getElementById("kotowaza_kanken_level");
+  if (proverbKankenSelect) {
+    proverbKankenSelect.value = minLevel;
+  }
+}
+
+async function handleSentenceOrWordsChange() {
+  // 1) Gather dictionary forms from #sentence_words
+  const rawWords = getObjectArrayValues("sentence_words");
+  const uniqueWords = new Set();
+  rawWords.forEach(obj => {
+    const dictForm = obj.defaultForm?.trim();
+    const surface = obj.surfaceForm?.trim();
+    const finalWord = dictForm || surface;
+    if (finalWord) uniqueWords.add(finalWord);
+  });
+
+  // 2) Extract all kanji from #sentence_text
+  const sentenceText = getValue("#sentence_text");
+  const uniqueKanji = extractKanji(sentenceText);
+
+  // 3) autoDetectKankenLevel
+  const minLevel = await autoDetectKankenLevel([...uniqueWords], [...uniqueKanji]);
+  
+  // 4) Set the <select>
+  const sentenceKankenSelect = document.getElementById("sentence_kanken_level");
+  if (sentenceKankenSelect) {
+    sentenceKankenSelect.value = minLevel;
+  }
+}

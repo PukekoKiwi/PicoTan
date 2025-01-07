@@ -179,7 +179,16 @@ import {
       throw new Error("例文（必須）が入力されていません。");
     }
   
-    const words_in_sentence = getArrayValues("sentence_words");
+    const rawWords = getObjectArrayValues("sentence_words");
+  
+    const words_in_sentence = rawWords.map((obj) => {
+      const surface = obj.surfaceForm || "";
+      const dict = obj.defaultForm || "";
+      return dict
+        ? `${surface}|${dict}`
+        : surface;
+    });
+  
     if (!words_in_sentence.length) {
       throw new Error("1つ以上の単語が必要です。");
     }
@@ -205,7 +214,7 @@ import {
       kanken_level,
       references,
     };
-  }
+  }  
   
   // ---------- YOJIJUKUGO BUILDER ----------
   export function buildYojijukugoDoc() {

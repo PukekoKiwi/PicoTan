@@ -1,3 +1,5 @@
+import { getWordEntries, getKanjiEntries } from "./dbUtils.js";
+
 // 1) DOM-Creation: Basic Fields
 export function createTextField({ id, labelText, required = false, inputType = "text" }) {
     const wrapper = document.createElement("div");
@@ -325,3 +327,61 @@ export function createTextField({ id, labelText, required = false, inputType = "
   
     return results;
   }  
+
+  /**
+ * Return a set of unique kanji from a string.
+ */
+export function extractKanji(str = "") {
+  // Match all characters in the main CJK range
+  const matches = str.match(/[\u4E00-\u9FFF]/g);
+  return new Set(matches || []);
+}
+
+/**
+ * Takes an array of “dictionary forms” for words, queries the DB in one shot,
+ * returns the *lowest* kanken level from the matched docs. If no docs found, returns `defaultLevel`.
+ */
+export async function getMinKankenLevelForWords(wordsArray, defaultLevel = 10) {
+  if (!wordsArray.length) return defaultLevel;
+
+  const docs = await getWordEntries(wordsArray);
+  if (!docs.length) return defaultLevel;
+
+  // doc.kanken_level might be a float (like 1.5). Safely do .map(d => d.kanken_level || 10)
+  const minLevel = Math.min(...docs.map(d => d.kanken_level ?? defaultLevel));
+  return minLevel;
+}
+
+/**
+ * Takes an array of single-character kanji, queries the DB in one shot,
+ * returns the *lowest* kanken level from the matched docs. If no docs found, returns `defaultLevel`.
+ */
+export async function getMinKankenLevelForKanji(kanjiArray, defaultLevel = 10) {
+  if (!kanjiArray.length) return defaultLevel;
+
+  const docs = await getKanjiEntries(kanjiArray);
+  if (!docs.length) return defaultLevel;
+
+  const minLevel = Math.min(...docs.map(d => d.kanken_level ?? defaultLevel));
+  return minLevel;
+}
+
+/**
+ * A generic function that merges the logic:
+ *  - For a given set of words 
+ *  - For a given set of kanji
+ *  → Returns the overall minimum kanken level.
+ */
+export async function autoDetectKankenLevel(wordsArray, kanjiArray, defaultLevel = 10) {
+  let result = defaultLevel;
+
+  // 1) Word-based
+  const minWordsLevel = await getMinKankenLevelForWords(wordsArray, defaultLevel);
+  if (minWordsLevel < result) result = minWordsLevel;
+
+  // 2) Kanji-based
+  const minKanjiLevel = await getMinKankenLevelForKanji(kanjiArray, defaultLevel);
+  if (minKanjiLevel < result) result = minKanjiLevel;
+
+  return result;
+}

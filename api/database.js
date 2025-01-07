@@ -1,6 +1,15 @@
 import { ObjectId } from "mongodb";
 import connectMongo from "./connectMongo";
 
+const validCollections = [
+  "radicals",
+  "kanji",
+  "words",
+  "yojijukugo",
+  "kotowaza",
+  "sentences",
+];
+
 const indexFieldMap = {
   radicals: "character",  // Indexed field for the "radicals" collection
   kanji: "character",     // Indexed field for the "kanji" collection
@@ -50,9 +59,13 @@ export async function readEntries({ operation, collectionName, ids, indexValues,
       if (!collectionName || !Array.isArray(indexValues) || indexValues.length === 0) {
         throw new Error("Missing or invalid collectionName or indexValues");
       }
+      // If there's no entry for this collection in indexFieldMap, 
+      // then it doesn't support index-based lookups:
       const indexField = indexFieldMap[collectionName];
-      if (!indexField) throw new Error(`Invalid collection: ${collectionName}`);
-
+      if (!indexField) {
+        throw new Error(`Collection '${collectionName}' does not support index-based lookups.`);
+      }
+    
       const query = { [indexField]: { $in: indexValues } };
       return db.collection(collectionName).find(query).toArray();
     }
@@ -157,8 +170,7 @@ export async function writeEntries({ operation, collectionName, newEntry, id, up
 
   switch (operation) {
     case "addEntry": {
-      // Validate collection name
-      if (!Object.keys(indexFieldMap).includes(collectionName)) {
+      if (!validCollections.includes(collectionName)) {
         throw new Error(`Invalid collection: ${collectionName}`);
       }
       if (!newEntry) {
