@@ -92,3 +92,43 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("Finished testing read operations.");
 });
 */
+
+/* ---------------------------------------- */
+/*       Page Initialization & Nav UI      */
+/* ---------------------------------------- */
+document.addEventListener('DOMContentLoaded', () => {
+  // Account menu toggle
+  const accountBtn  = document.querySelector('#nav-account-btn');
+  const accountMenu = document.querySelector('#account-menu');
+  accountBtn.addEventListener('click', () => {
+    accountMenu.classList.toggle('hidden');
+  });
+
+  // Sidebar / Top-bar navigation routing
+  document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      window.location.href = btn.dataset.target;
+    });
+  });
+
+  // Login / Logout handlers
+  const loginBtn  = document.querySelector('#login-btn');
+  const logoutBtn = document.querySelector('#logout-btn');
+  const token     = localStorage.getItem('picotan_jwt');
+
+  if (token) {
+    loginBtn.style.display  = 'none';
+    logoutBtn.style.display = '';       // restores to default
+  } else {
+    logoutBtn.style.display = 'none';
+    loginBtn.style.display  = '';
+  }
+  
+  loginBtn?.addEventListener('click', () => {
+    window.location.href = 'login.html';
+  });
+  logoutBtn?.addEventListener('click', () => {
+    localStorage.removeItem('picotan_jwt');
+    window.location.href = 'login.html';
+  });
+});

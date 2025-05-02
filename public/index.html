@@ -10,6 +10,8 @@
   <!-- <meta property="og:image" content="" /> -->
   <!-- <meta property="og:type" content="website" /> -->
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
   <link rel="icon" href="assets/favicons/picotan_neutral.ico" />
   <title>ピコ鍛</title>
 
@@ -17,52 +19,114 @@
   <link rel="stylesheet" href="styles/main.css" />
 
   <!-- Sitewide Scripts -->
+  <script type="module" src="scripts/main.js"></script>
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
 
   <!-- Page-Specific Scripts-->
-  <script type="module" src="scripts/main.js"></script>
 </head>
 <body>
-
-  <header class="site-header">
-    <div class="greeting-container">
-      <p id="greetingMessage" class="greeting-message"></p>
+  <!-- Sidebar / Top-bar Navigation -->
+  <nav id="main-nav">
+    <div class="nav-section nav-top" style="position: relative;">
+      <button
+        id="nav-account-btn"
+        class="nav-btn"
+        data-tooltip="Account"
+      >
+        <i class="fa-solid fa-user"></i>
+      </button>
+      <div id="account-menu" class="account-menu hidden">
+        <button id="login-btn" class="menu-item">ログイン</button>
+        <button id="logout-btn" class="menu-item">ログアウト</button>
+      </div>
     </div>
+  
+    <div class="nav-section nav-middle">
+      <button
+        class="nav-btn"
+        data-target="search.html"
+        data-tooltip="Search"
+      >
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button
+        class="nav-btn"
+        data-target="add-entry.html"
+        data-tooltip="Add Entry"
+      >
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <button
+        class="nav-btn"
+        data-target="review.html"
+        data-tooltip="Review"
+      >
+        <i class="fa-solid fa-repeat"></i>
+      </button>
+      <button
+        class="nav-btn"
+        data-target="random.html"
+        data-tooltip="Random"
+      >
+        <i class="fa-solid fa-dice"></i>
+      </button>
+    </div>
+  
+    <div class="nav-section nav-bottom">
+      <div class="picotan-widget">
+        <a href="index.html" class="picotan-icon">
+          <i class="fa-solid fa-robot"></i>
+        </a>
+        <div class="chat-bubble">頑張って！</div>
+      </div>
+    </div>
+  </nav>  
 
-    <nav class="navigation">
-      <ul class="navigation__list">
-        <li class="navigation__item"><a href="search.html">検索</a></li>
-        <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
-        <li class="navigation__item"><a href="review.html">復習</a></li>
-        <li class="navigation__item"><a href="random.html">お任せ</a></li>
-        <li class="navigation__item"><a href="login.html">ログイン</a></li>
-        <li class="navigation__item navigation__item--logout"><a href="#" id="logoutButton">ログアウト</a></li>
-      </ul>
-    </nav>
-  </header>
+  <!-- Main content area, shifted right on desktop / below nav on mobile -->
+  <div class="app-container">
+    <!-- Greeting (uses scripts/greeting.js) -->
+    <header class="content-header">
+      <div class="greeting-container">
+        <p id="greetingMessage" class="greeting-message"></p>
+      </div>
+    </header>
 
-  <main class="home-main">
-    <section class="hero">
-      <h1 class="hero__title"><span class="hero__pico">ピコ鍛</span>へようこそ</h1>
-      <p class="hero__subtitle">
-        漢検我利勉の相棒ボット！ 
-      </p>
-    </section>
+    <!-- Home hero + features -->
+    <main class="home-main">
+      <section class="hero">
+        <h1 class="hero__title">
+          <span class="hero__pico">ピコ鍛</span>へようこそ
+        </h1>
+        <p class="hero__subtitle">漢検我利勉の相棒ボット！</p>
+      </section>
 
-    <section class="feature-intro">
-      <h2 class="feature-intro__heading">主な機能</h2>
-      <ul class="feature-intro__list">
-        <li class="feature-intro__item">漢字、言葉、四字熟語などを検索</li>
-        <li class="feature-intro__item">自分だけの項目を直接追加</li>
-        <li class="feature-intro__item">SRSやクイズシステムで復習</li>
-        <li class="feature-intro__item">ランダムな項目を発見したり、「今日の言葉」を取得</li>
-      </ul>
-    </section>
-  </main>
+      <section class="feature-intro">
+        <h2 class="feature-intro__heading">主な機能</h2>
+        <ul class="feature-intro__list">
+          <li class="feature-intro__item">漢字、言葉、四字熟語などを検索</li>
+          <li class="feature-intro__item">自分だけの項目を直接追加</li>
+          <li class="feature-intro__item">SRSやクイズシステムで復習</li>
+          <li class="feature-intro__item">
+            ランダムな項目を発見したり、「今日の言葉」を取得
+          </li>
+        </ul>
+      </section>
+    </main>
 
-  <footer class="site-footer">
-    <p class="site-footer__copy">© 2024 Liam Armitage. All rights reserved.</p>
-  </footer>
+    <!-- Footer -->
+    <footer class="site-footer">
+      <p class="site-footer__copy">© 2025 Liam Armitage. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script
+    defer
+    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+  ></script>
+  <script type="module" src="scripts/logout.js"></script>
+  <script type="module" src="scripts/greeting.js"></script>
+  <script type="module" src="scripts/main.js"></script>
 </body>
 </html>

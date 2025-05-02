@@ -1,23 +1,261 @@
+/*================================
+  1. Root & Base Styles
+================================*/
 :root {
+    /* Existing palette */
     --radicals-color: #00A1FA;
-    --kanji-color: #F100A1;
-    --words-color: #A100F1;
+    --kanji-color:    #F100A1;
+    --words-color:    #A100F1;
     --yojijukugo-color: #F1A100;
     --kotowaza-color: #A100A1;
     --sentences-color: #F10000;
-}
-
-@font-face {
+  
+    /* Cyber‑academia theme */
+    --bg-nav:          #272a30;
+    --bg-card:         #1b1d22;
+    --text-primary:    #e1e1e1;
+    --accent-cyber:    var(--radicals-color);
+  
+    /* Spacing */
+    --spacing-xs: 0.25rem;
+    --spacing-sm: 0.5rem;
+    --spacing-md: 1rem;
+    --spacing-lg: 2rem;
+  
+    /* Nav sizing */
+    --nav-width: 4rem;
+    --btn-size:  3rem;
+    --nav-gap:   var(--spacing-md);
+  }
+  
+  @font-face {
     font-family: 'Kyokasho';
     src: url('../assets/fonts/Kyokasho.TTF') format('truetype');
     font-weight: normal;
     font-style: normal;
-}
-
-body {
-    font-family: 'Kyokasho', sans-serif;
   }
-
-.navigation__item--logout {
+  
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Kyokasho', sans-serif;
+    color: var(--text-primary);
+    background: #1b1d22;
+  }
+  
+  /* Hide the default logout nav item */
+  .navigation__item--logout {
     display: none;
-}
+  }
+  
+  
+  /*================================
+    2. Navigation (Sidebar / Topbar)
+  ================================*/
+  #main-nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--nav-width);
+    box-sizing: border-box;     /* include padding in height */
+    height: 100vh;
+    background: var(--bg-nav);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--nav-gap) 0;
+    gap: var(--nav-gap);
+    z-index: 1000;
+  }
+  
+  /* Top section context for popup */
+  .nav-top {
+    position: relative;
+  }
+  
+  /* All nav sections */
+  .nav-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--nav-gap);
+  }
+  
+  /*================================
+    3. Buttons & Tooltips
+  ================================*/
+  .nav-btn {
+    position: relative;          /* for tooltip */
+    width: var(--btn-size);
+    height: var(--btn-size);
+    border: none;
+    border-radius: 50%;
+    background: none;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform .2s, color .2s;
+  }
+  
+  .nav-btn:hover {
+    transform: scale(1.1);
+    color: var(--accent-cyber);
+  }
+  
+  /* Suppress tooltip on account button */
+  #nav-account-btn::after {
+    display: none !important;
+  }
+  
+  /* Tooltip default (hidden) */
+  .nav-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    opacity: 0;
+    pointer-events: none;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: .25rem;
+    font-size: .75rem;
+    white-space: nowrap;
+    transition: opacity .2s;
+  }
+  
+  .nav-btn:hover::after {
+    opacity: 1;
+  }
+  
+  
+  /*================================
+    4. Account Menu
+  ================================*/
+  .account-menu {
+    position: absolute;
+    top:    calc(var(--btn-size) + var(--spacing-sm));
+    left:   50%;
+    transform: translateX(-50%);
+    background: var(--bg-card);
+    border: 1px solid var(--accent-cyber);
+    border-radius: .25rem;
+    display: flex;
+    flex-direction: column;
+    z-index: 2000;
+  }
+  
+  .account-menu.hidden {
+    display: none;
+  }
+  
+  /* Menu items */
+  .menu-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    color: var(--text-primary);
+    border: none;
+    text-align: left;
+    cursor: pointer;
+  }
+  
+  .menu-item:hover {
+    background: rgba(0, 255, 255, .1);
+  }
+  
+  
+  /*================================
+    5. Picotan Widget & Chat Bubble
+  ================================*/
+  .picotan-widget {
+    position: relative;
+    font-size: 1.5rem;
+    color: var(--accent-cyber);
+  }
+  
+  .chat-bubble {
+    position: absolute;
+    background: var(--bg-card);
+    color: var(--text-primary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: .25rem;
+    white-space: nowrap;
+    transition: all .2s;
+  }
+  
+  
+  /*================================
+    6. App Container Offset
+  ================================*/
+  .app-container {
+    margin-left: var(--nav-width);
+    transition: margin .2s;
+  }
+  
+  
+  /*================================
+    7. Responsive Adjustments
+  ================================*/
+  /* Mobile: nav becomes top bar, reset content offset, vertical bubble */
+  @media (max-width: 768px) {
+    #main-nav {
+      width: 100%;
+      height: var(--btn-size);
+      flex-direction: row;
+      padding: 0 var(--nav-gap);
+    }
+  
+    .nav-section {
+      flex-direction: row;
+    }
+  
+    .app-container {
+      margin-left: 0;
+      padding-top: var(--btn-size);
+    }
+  
+    .account-menu {
+      width: max-content;
+      top:    calc(var(--btn-size) + var(--spacing-sm));
+      left:   50%;
+      transform: translateX(-25%);
+    }
+  
+    .chat-bubble {
+      top:    calc(100% + var(--spacing-xs));
+      left:   50%;
+      transform: translateX(-50%);
+      writing-mode: vertical-rl;
+      font-size: 1.75rem;
+    }
+  
+    .nav-btn::after {
+      bottom: calc(-1 * var(--spacing-md));
+      left:   50%;
+      transform: translateX(-50%);
+    }
+  }
+  
+  /* Desktop: tooltips to the right, horizontal bubble */
+  @media (min-width: 769px) {
+    
+    /* Some fun optical alignment jazz */
+    .nav-middle {
+        margin-bottom: 8vh;
+    }
+
+    .nav-btn::after {
+      top:    50%;
+      left:   calc(100% + var(--spacing-xs));
+      transform: translateY(-50%);
+    }
+  
+    .chat-bubble {
+      top:            50%;
+      left:           calc(100% + var(--spacing-xs));
+      transform:      translateY(-50%);
+      writing-mode:   horizontal-tb;
+      text-orientation: mixed;
+      font-size:      2rem;
+    }
+  }
+  

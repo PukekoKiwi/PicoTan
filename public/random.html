@@ -7,20 +7,18 @@
   <meta name="description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語を見つける！" />
   <meta property="og:title" content="ピコ鍛 - お任せ" />
   <meta property="og:description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語を見つける！" />
-  <!-- <meta property="og:image" content="" /> -->
-  <!-- <meta property="og:type" content="website" /> -->
 
   <link rel="icon" href="assets/favicons/picotan_neutral.ico" />
   <title>おまかせ - ピコ鍛</title>
 
   <!-- Styling -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="styles/main.css" />
 
   <!-- Sitewide Scripts -->
+  <script type="module" src="scripts/main.js"></script>
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
-
-  <!-- Page-Specific Scripts-->
 </head>
 <body>
   <header class="site-header">
@@ -28,16 +26,38 @@
       <p id="greetingMessage" class="greeting-message"></p>
     </div>
 
-    <nav class="navigation">
-      <ul class="navigation__list">
-        <li class="navigation__item"><a href="index.html">ホーム</a></li>
-        <li class="navigation__item"><a href="search.html">検索</a></li>
-        <li class="navigation__item"><a href="add-entry.html">項目追加</a></li>
-        <li class="navigation__item"><a href="review.html">復習</a></li>
-        <li class="navigation__item navigation__item--active"><a href="random.html">お任せ</a></li>
-        <li class="navigation__item"><a href="login.html">ログイン</a></li>
-        <li class="navigation__item navigation__item--logout"><a href="#" id="logoutButton">ログアウト</a></li>
-      </ul>
+    <nav id="main-nav">
+      <div class="nav-section nav-top">
+        <button id="nav-account-btn" class="nav-btn" data-tooltip="Account">
+          <i class="fa-solid fa-user"></i>
+        </button>
+        <div id="account-menu" class="account-menu hidden">
+          <button id="login-btn" class="menu-item">ログイン</button>
+          <button id="logout-btn" class="menu-item">ログアウト</button>
+        </div>
+      </div>
+      <div class="nav-section nav-middle">
+        <button class="nav-btn" data-target="search.html" data-tooltip="検索">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <button class="nav-btn" data-target="add-entry.html" data-tooltip="項目追加">
+          <i class="fa-solid fa-plus"></i>
+        </button>
+        <button class="nav-btn" data-target="review.html" data-tooltip="復習">
+          <i class="fa-solid fa-repeat"></i>
+        </button>
+        <button class="nav-btn" data-target="random.html" data-tooltip="お任せ">
+          <i class="fa-solid fa-dice"></i>
+        </button>
+      </div>
+      <div class="nav-section nav-bottom">
+        <div class="picotan-widget">
+          <a href="index.html" class="picotan-icon">
+            <i class="fa-solid fa-robot"></i>
+          </a>
+          <div class="chat-bubble">頑張って！</div>
+        </div>
+      </div>
     </nav>
   </header>
 
@@ -54,10 +74,18 @@
       <label for="random-level">級</label>
       <select id="random-level" class="random-controls__select">
         <option value="all">全</option>
-        <option value="10">十</option>
-        <option value="9">九</option>
+        <option value="1">一</option>
+        <option value="1.5">準一</option>
+        <option value="2">二</option>
+        <option value="2.5">準二</option>
+        <option value="3">三</option>
+        <option value="4">四</option>
+        <option value="5">五</option>
+        <option value="6">六</option>
+        <option value="7">七</option>
         <option value="8">八</option>
-        <!-- ... Add more or dynamically generate -->
+        <option value="9">九</option>
+        <option value="10">十</option>
       </select>
 
       <button id="random-btn" class="random-controls__button">おまかせ</button>
@@ -72,7 +100,7 @@
   </main>
 
   <footer class="site-footer">
-    <p class="site-footer__copy">© 2024 Liam Armitage. All rights reserved.</p>
+    <p class="site-footer__copy">© 2025 Liam Armitage. All rights reserved.</p>
   </footer>
 </body>
 </html>
