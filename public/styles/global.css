@@ -174,18 +174,25 @@ body {
 ================================*/
 .picotan-widget {
   position: relative;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   color: var(--accent-cyber);
+  display: inline-flex;
+  align-items: center;
 }
+
 
 .chat-bubble {
   position: absolute;
+  top: 50%;
+  left: calc(100% + var(--spacing-xs));
+  transform: translateY(-50%);
   background: var(--bg-card);
   color: var(--text-primary);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: .25rem;
   white-space: nowrap;
-  transition: all .2s;
+  font-size: 2rem;
+  line-height: 1.2em;
 }
 
 /*================================
@@ -238,7 +245,7 @@ body {
   }
 
   .chat-bubble {
-    top: calc(100% + var(--spacing-xs));
+    top: calc(100% + var(--spacing-md));
     left: 50%;
     transform: translateX(-50%);
     writing-mode: vertical-rl;
@@ -264,10 +271,8 @@ body {
   }
 
   .chat-bubble {
-    top: 50%;
-    left: calc(100% + var(--spacing-xs));
-    transform: translateY(-50%);
     writing-mode: horizontal-tb;
     font-size: 2rem;
+    left: calc(100% + var(--spacing-md));
   }
 }
