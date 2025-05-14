@@ -14,44 +14,48 @@ const greetings = [
     "ようこそ、{username}さん。目標に邁進。"
 ];
   
-// Select the greeting message element
-const greetingMessage = document.querySelector("#greetingMessage");
-  
-// Check if the user is logged in and display a greeting
-const token = localStorage.getItem("picotan_jwt");
-if (token) {
-    const decoded = parseJwt(token); // Decode the token to get user info
-    if (decoded?.username) {
-        // Pick a random greeting
-        const randomGreeting = greetings[Math.floor(Math.random() * greetings.length)];
-      
-        // Replace the placeholder with the username
-        const personalizedGreeting = randomGreeting.replace(
-            "{username}",
-            decoded.username
-        );
-      
-        // Display the greeting
-        greetingMessage.textContent = personalizedGreeting;
-        greetingMessage.style.display = "block"; // Ensure the greeting is visible
-    }
-}
-  
-// Utility function to decode JWT
+/**
+ * Decode JWT payload.
+ */
 function parseJwt(token) {
     try {
-        const base64Url = token.split(".")[1];
-        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-        const jsonPayload = decodeURIComponent(
-            atob(base64)
-            .split("")
-            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
-            .join("")
-        );
-        return JSON.parse(jsonPayload);
-    } catch (e) {
-        console.error("Failed to parse token:", e);
-        return null;
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const json = decodeURIComponent(
+        atob(base64)
+          .split('')
+          .map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2))
+          .join('')
+      );
+      return JSON.parse(json);
+    } catch {
+      return {};
     }
-}
+  }
   
+  document.addEventListener('DOMContentLoaded', () => {
+    const bubble = document.getElementById('greeting-message');
+    if (!bubble) return;
+  
+    const token = localStorage.getItem('picotan_jwt');
+    if (!token) {
+      bubble.textContent = '頑張って！';
+      return;
+    }
+  
+    const decoded = parseJwt(token);
+    const rawName = decoded?.username;
+    if (!rawName) {
+      bubble.textContent = '頑張って！';
+      return;
+    }
+  
+    // Just for fun: replace 'Liam' with '琉煌', my Japanese name
+    const username = rawName === 'Liam' ? '琉煌' : rawName;
+  
+    // Pick a random template and inject the (possibly replaced) username
+    const template = greetings[
+      Math.floor(Math.random() * greetings.length)
+    ];
+    bubble.textContent = template.replace('{username}', username);
+  });

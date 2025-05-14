@@ -10,88 +10,46 @@
   <!-- <meta property="og:image" content="" /> -->
   <!-- <meta property="og:type" content="website" /> -->
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-
   <link rel="icon" href="assets/favicons/picotan_neutral.ico" />
   <title>ピコ鍛</title>
 
-  <!-- Styling -->
-  <link rel="stylesheet" href="styles/main.css" />
+  <!-- FontAwesome & CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="styles/global.css" />
 
-  <!-- Sitewide Scripts -->
+  <!-- Site‑wide modules (deferred by default) -->
   <script type="module" src="scripts/main.js"></script>
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
 
-  <!-- Page-Specific Scripts-->
 </head>
 <body>
-  <!-- Sidebar / Top-bar Navigation -->
+  
+  <!-- Side Bar Navigation -->
   <nav id="main-nav">
     <div class="nav-section nav-top" style="position: relative;">
-      <button
-        id="nav-account-btn"
-        class="nav-btn"
-        data-tooltip="Account"
-      >
-        <i class="fa-solid fa-user"></i>
-      </button>
+      <button id="nav-account-btn" class="nav-btn" data-tooltip="アカウント"><i class="fa-regular fa-circle-user"></i></button>
       <div id="account-menu" class="account-menu hidden">
         <button id="login-btn" class="menu-item">ログイン</button>
         <button id="logout-btn" class="menu-item">ログアウト</button>
       </div>
     </div>
-  
     <div class="nav-section nav-middle">
-      <button
-        class="nav-btn"
-        data-target="search.html"
-        data-tooltip="Search"
-      >
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
-      <button
-        class="nav-btn"
-        data-target="add-entry.html"
-        data-tooltip="Add Entry"
-      >
-        <i class="fa-solid fa-plus"></i>
-      </button>
-      <button
-        class="nav-btn"
-        data-target="review.html"
-        data-tooltip="Review"
-      >
-        <i class="fa-solid fa-repeat"></i>
-      </button>
-      <button
-        class="nav-btn"
-        data-target="random.html"
-        data-tooltip="Random"
-      >
-        <i class="fa-solid fa-dice"></i>
-      </button>
+      <button class="nav-btn" data-target="search.html" data-tooltip="検索"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="nav-btn" data-target="add-entry.html" data-tooltip="項目追加"><i class="fa-solid fa-plus"></i></button>
+      <button class="nav-btn" data-target="review.html" data-tooltip="復習"><i class="fa-regular fa-clone"></i></button>
+      <button class="nav-btn" data-target="random.html" data-tooltip="お任せ"><i class="fa-regular fa-compass"></i></button>
     </div>
-  
     <div class="nav-section nav-bottom">
       <div class="picotan-widget">
-        <a href="index.html" class="picotan-icon">
-          <i class="fa-solid fa-robot"></i>
-        </a>
-        <div class="chat-bubble">頑張って！</div>
+        <a href="index.html" class="picotan-icon"><i class="fa-regular fa-smile"></i></a>
+        <div class="chat-bubble" id="greeting-message">頑張って！</div>
       </div>
     </div>
   </nav>  
 
   <!-- Main content area, shifted right on desktop / below nav on mobile -->
   <div class="app-container">
-    <!-- Greeting (uses scripts/greeting.js) -->
-    <header class="content-header">
-      <div class="greeting-container">
-        <p id="greetingMessage" class="greeting-message"></p>
-      </div>
-    </header>
-
     <!-- Home hero + features -->
     <main class="home-main">
       <section class="hero">
@@ -113,20 +71,9 @@
         </ul>
       </section>
     </main>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-      <p class="site-footer__copy">© 2025 Liam Armitage. All rights reserved.</p>
-    </footer>
   </div>
 
-  <!-- Scripts -->
-  <script
-    defer
-    src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
-  ></script>
-  <script type="module" src="scripts/logout.js"></script>
-  <script type="module" src="scripts/greeting.js"></script>
-  <script type="module" src="scripts/main.js"></script>
 </body>
 </html>
+
+

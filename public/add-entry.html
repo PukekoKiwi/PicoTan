@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,7 +14,7 @@
 
   <!-- Styling -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="styles/main.css" />
+  <link rel="stylesheet" href="styles/global.css" />
   <link rel="stylesheet" href="styles/add-entry.css" />
 
   <!-- Sitewide Scripts -->
@@ -24,82 +25,67 @@
   <!-- Page-Specific Scripts-->
   <script type="module" src="scripts/addEntry.js"></script>
 </head>
+
 <body>
 
-  <header class="site-header">
-    <div class="greeting-container">
-      <p id="greetingMessage" class="greeting-message"></p>
+  <!-- Side Bar Navigation -->
+  <nav id="main-nav">
+    <div class="nav-section nav-top" style="position: relative;">
+      <button id="nav-account-btn" class="nav-btn" data-tooltip="アカウント"><i class="fa-regular fa-circle-user"></i></button>
+      <div id="account-menu" class="account-menu hidden">
+        <button id="login-btn" class="menu-item">ログイン</button>
+        <button id="logout-btn" class="menu-item">ログアウト</button>
+      </div>
     </div>
+    <div class="nav-section nav-middle">
+      <button class="nav-btn" data-target="search.html" data-tooltip="検索"><i class="fa-solid fa-magnifying-glass"></i></button>
+      <button class="nav-btn" data-target="add-entry.html" data-tooltip="項目追加"><i class="fa-solid fa-plus"></i></button>
+      <button class="nav-btn" data-target="review.html" data-tooltip="復習"><i class="fa-regular fa-clone"></i></button>
+      <button class="nav-btn" data-target="random.html" data-tooltip="お任せ"><i class="fa-regular fa-compass"></i></button>
+    </div>
+    <div class="nav-section nav-bottom">
+      <div class="picotan-widget">
+        <a href="index.html" class="picotan-icon"><i class="fa-regular fa-smile"></i></a>
+        <div class="chat-bubble" id="greeting-message">頑張って！</div>
+      </div>
+    </div>
+  </nav>  
 
-    <nav id="main-nav">
-      <div class="nav-section nav-top">
-        <button id="nav-account-btn" class="nav-btn" data-tooltip="Account">
-          <i class="fa-solid fa-user"></i>
-        </button>
-        <div id="account-menu" class="account-menu hidden">
-          <button id="login-btn" class="menu-item">ログイン</button>
-          <button id="logout-btn" class="menu-item">ログアウト</button>
+  <!-- Main content area, shifted right on desktop / below nav on mobile -->
+  <div class="app-container">
+    <main class="add-entry-main">
+      <section class="add-entry-controls">
+        <h1 class="add-entry-controls__title">新項目を追加</h1>
+
+        <div class="add-entry-controls__form">
+          <label for="entry-type" class="required">種類:</label>
+          <select id="entry-type" class="add-entry-controls__select">
+            <option value="radical">部首</option>
+            <option value="kanji">漢字</option>
+            <option value="word">言葉</option>
+            <option value="sentence">例文</option>
+            <option value="yojijukugo">四字熟語</option>
+            <option value="kotowaza">諺</option>
+          </select>
         </div>
-      </div>
-      <div class="nav-section nav-middle">
-        <button class="nav-btn" data-target="search.html" data-tooltip="検索">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-        <button class="nav-btn" data-target="add-entry.html" data-tooltip="項目追加">
-          <i class="fa-solid fa-plus"></i>
-        </button>
-        <button class="nav-btn" data-target="review.html" data-tooltip="復習">
-          <i class="fa-solid fa-repeat"></i>
-        </button>
-        <button class="nav-btn" data-target="random.html" data-tooltip="お任せ">
-          <i class="fa-solid fa-dice"></i>
-        </button>
-      </div>
-      <div class="nav-section nav-bottom">
-        <div class="picotan-widget">
-          <a href="index.html" class="picotan-icon">
-            <i class="fa-solid fa-robot"></i>
-          </a>
-          <div class="chat-bubble">頑張って！</div>
+
+        <!-- The following section is dynamically populated with fields for each type -->
+        <form id="entry-fields" class="add-entry-controls__fields">
+          <!-- Dynamic fields go here -->
+        </form>
+
+        <button id="save-btn" class="add-entry-controls__button">ピコっと登録！</button>
+      </section>
+
+      <section class="add-entry-output">
+        <h2 class="add-entry-output__heading">ステータス</h2>
+        <div id="output-container" class="add-entry-output__container">
+          <!-- Display status messages, or any JSON preview -->
         </div>
-      </div>
-    </nav>
-  </header>
-
-  <main class="add-entry-main">
-    <section class="add-entry-controls">
-      <h1 class="add-entry-controls__title">新項目を追加</h1>
-
-      <div class="add-entry-controls__form">
-        <label for="entry-type" class="required">種類:</label>
-        <select id="entry-type" class="add-entry-controls__select">
-          <option value="radical">部首</option>
-          <option value="kanji">漢字</option>
-          <option value="word">言葉</option>
-          <option value="sentence">例文</option>
-          <option value="yojijukugo">四字熟語</option>
-          <option value="kotowaza">諺</option>
-        </select>
-      </div>
-
-      <!-- The following section is dynamically populated with fields for each type -->
-      <form id="entry-fields" class="add-entry-controls__fields">
-        <!-- Dynamic fields go here -->
-      </form>
-
-      <button id="save-btn" class="add-entry-controls__button">ピコっと登録！</button>
-    </section>
-
-    <section class="add-entry-output">
-      <h2 class="add-entry-output__heading">ステータス</h2>
-      <div id="output-container" class="add-entry-output__container">
-        <!-- Display status messages, or any JSON preview -->
-      </div>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p class="site-footer__copy">© 2025 Liam Armitage. All rights reserved.</p>
-  </footer>
+      </section>
+    </main>
+  </div>
+  
 </body>
+
 </html>
