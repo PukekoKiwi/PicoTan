@@ -30,7 +30,6 @@
             rgba(114, 105, 221, 0.08) 0%,
             rgba(11, 21, 158, 0) 35%);
     z-index: 4000;
-    mix-blend-mode: screen;
 }
 
 .app-container::after {
@@ -223,9 +222,8 @@
     opacity: .3;
   }
   
-  /* hover animation – only transform, so it’s GPU-cheap */
+  /* hover animation */
   .feature-card__inner:hover {
-    will-change: transform;     /* safe on desktop, Safari keeps filters */
     transform: translateY(-4px);
   }
 
@@ -271,5 +269,13 @@
       width: 100%;
       max-width: 70vw;
       margin-inline: auto;
+    }
+  }
+
+  /* Improve performance while not making dumb GPU crash stuff happen on mobile */
+  @media (hover:hover){                 /* desktop / laptop */
+    .feature-card__inner:hover{
+      transform: translateY(-4px);
+      will-change: transform;
     }
   }
