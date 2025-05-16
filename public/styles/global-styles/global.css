@@ -237,6 +237,10 @@ body {
     gap: var(--spacing-sm);
   }
 
+  .account-menu {
+    top: calc(var(--btn-size-mobile) + var(--spacing-sm));
+  }
+
   .app-container {
     margin-left: 0;
     padding-top: var(--btn-size-mobile);
@@ -278,6 +282,10 @@ body {
   .nav-btn {
     width: var(--btn-size-mobile-mini);
     height: var(--btn-size-mobile-mini);
+  }
+
+  .account-menu {
+    top: calc(var(--btn-size-mobile-mini) + var(--spacing-xs));
   }
 
   .chat-bubble {
