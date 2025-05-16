@@ -143,11 +143,16 @@
 .feature-intro {
     padding: var(--spacing-lg);
     width: clamp(320px, 90%, 1500px);
-    filter: drop-shadow(1px 0px 0px var(--accent-cyber))
-    drop-shadow(-1px 0px 0px var(--accent-cyber))
-    drop-shadow(0px 1px 0px var(--accent-cyber))
-    drop-shadow(0px -1px 0px var(--accent-cyber))
-    drop-shadow(0 0 10px color-mix(in srgb, var(--accent-cyber) 30%, transparent));
+    filter: drop-shadow( 1px  0   0   var(--accent-cyber))
+            drop-shadow(-1px  0   0   var(--accent-cyber))
+            drop-shadow( 0    1px 0   var(--accent-cyber))
+            drop-shadow( 0   -1px 0   var(--accent-cyber))
+            drop-shadow( 0    0   10px color-mix(in srgb, var(--accent-cyber) 30%, transparent));
+    -webkit-filter: drop-shadow( 1px  0   0   var(--accent-cyber))
+                    drop-shadow(-1px  0   0   var(--accent-cyber))
+                    drop-shadow( 0    1px 0   var(--accent-cyber))
+                    drop-shadow( 0   -1px 0   var(--accent-cyber))
+                    drop-shadow( 0    0   10px color-mix(in srgb, var(--accent-cyber) 30%, transparent));
 }
 
 /* ───── grid of mini-cards ───── */
