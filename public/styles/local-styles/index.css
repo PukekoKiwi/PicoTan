@@ -137,148 +137,139 @@
 }
 
 /*---------------------------------------------------------------
-    3. FEATURE SECTION   (convex cut-corners)
+    3. FEATURE SECTION   (convex cut-corners + glow wrapper)
 ----------------------------------------------------------------*/
 .feature-intro {
     padding: var(--spacing-lg);
     width: clamp(320px, 90%, 1500px);
-    filter: drop-shadow( 1px  0   0   var(--accent-color))
-            drop-shadow(-1px  0   0   var(--accent-color))
-            drop-shadow( 0    1px 0   var(--accent-color))
-            drop-shadow( 0   -1px 0   var(--accent-color))
-            drop-shadow( 0    0   10px rgba(var(--accent), .3));
-    -webkit-filter: drop-shadow( 1px  0   0   var(--accent-color))
-                    drop-shadow(-1px  0   0   var(--accent-color))
-                    drop-shadow( 0    1px 0   var(--accent-color))
-                    drop-shadow( 0   -1px 0   var(--accent-color))
-                    drop-shadow( 0    0   10px rgba(var(--accent), .3));
-}
-
-/* ───── grid of mini-cards ───── */
-.feature-intro__list {
-    justify-content: center;
+  }
+  
+  /* ───── responsive grid ───── */
+  .feature-intro__list {
     --card: min(200px, 100%);
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--card), 1fr));
     gap: var(--spacing-lg);
-    margin: 0;
+    justify-content: center;
+    margin: 0 0 var(--spacing-lg);
     padding: 0;
-    margin-bottom: var(--spacing-lg);
     list-style: none;
-}
-
-.feature-intro__item {
+  }
+  
+  /* -------- wrapper that holds ALL drop-shadows (no movement) ---- */
+  .feature-card {
+    filter: drop-shadow( 1px  0   0   var(--accent-color))
+            drop-shadow(-1px  0   0   var(--accent-color))
+            drop-shadow( 0    1px 0   var(--accent-color))
+            drop-shadow( 0   -1px 0   var(--accent-color))
+            drop-shadow( 0    0  10px rgba(var(--accent), .3));
+    -webkit-filter: drop-shadow( 1px  0   0   var(--accent-color))
+                    drop-shadow(-1px  0   0   var(--accent-color))
+                    drop-shadow( 0    1px 0   var(--accent-color))
+                    drop-shadow( 0   -1px 0   var(--accent-color))
+                    drop-shadow( 0    0  10px rgba(var(--accent), .3));
+    position: relative;        /* keeps ::after of inner in place */
+  }
+  
+  /* -------- inner card that actually moves on hover -------------- */
+  .feature-card__inner {
     position: relative;
     padding: var(--spacing-lg) calc(var(--spacing-md) + 5px);
     padding-left: calc(var(--spacing-md) + 10px);
-    text-align: left;
     font-size: 1.5rem;
     line-height: 1.4;
+    text-align: left;
+    background: rgba(13, 15, 17, 0.95);
     transition: transform .05s;
     cursor: default;
-
-    background: linear-gradient(90deg,
-            var(--radicals-color) 0%,
-            var(--yojijukugo-color) 100%);
-
+  
+    /* cut-corner mask */
     clip-path: polygon(100% 0,
-            15% 0,
-            10% 10%,
-            0% 10%,
-            0 95%,
-            2% 100%,
-            95% 100%,
-            100% 90%);
+                       15% 0,
+                       10% 10%,
+                       0% 10%,
+                       0 95%,
+                       2% 100%,
+                       95% 100%,
+                       100% 90%);
     -webkit-clip-path: polygon(100% 0,
-            15% 0,
-            10% 10%,
-            0% 10%,
-            0 95%,
-            2% 100%,
-            95% 100%,
-            100% 90%);
-    background: rgba(13, 15, 17, 0.95);
-    contain: layout paint;
-}
-
-.feature-intro__item::after {
+                               15% 0,
+                               10% 10%,
+                               0% 10%,
+                               0 95%,
+                               2% 100%,
+                               95% 100%,
+                               100% 90%);
+    /*                        
+    background-image: linear-gradient(90deg,
+                                      var(--radicals-color) 0%,
+                                      var(--yojijukugo-color) 100%);
+                                      */
+  }
+  
+  /* neon rim */
+  .feature-card__inner::after {
     content: "";
     position: absolute;
     inset: -1px;
-    /* overlap border exactly */
     clip-path: inherit;
-    /* reuse the same cut */
     background: linear-gradient(90deg,
-            var(--radicals-color) 0%,
-            var(--radicals-color) 3%,
-            transparent 3%);
+                                var(--radicals-color) 0%,
+                                var(--radicals-color) 3%,
+                                transparent 3%);
     mix-blend-mode: screen;
-    z-index: -1;
     pointer-events: none;
+    z-index: -1;
     opacity: .3;
-}
-
-.feature-intro__item:hover {
+  }
+  
+  /* hover animation – only transform, so it’s GPU-cheap */
+  .feature-card__inner:hover {
+    will-change: transform;     /* safe on desktop, Safari keeps filters */
     transform: translateY(-4px);
-    text-shadow: 0 0 12px var(--accent-color);
-}
-
-.feature-intro__item:hover::before {
-    box-shadow: 0 0 6px var(--accent-color),
-        0 0 12px var(--accent-color);
-}
+  }
 
 /*---------------------------------------------------------------
-    4. SMALL-SCREEN ADJUSTMENTS
+    4. SMALL-SCREEN ADJUSTMENTS  (≤ 768 px)
 ----------------------------------------------------------------*/
-@media(max-width: 768px) {
-    .app-container {
-        height: auto;
-        min-height: calc(100dvh - var(--btn-size-mobile));
-        overflow: visible;
-        padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0px));
-    }
+@media (max-width: 768px) {
 
-    .home-main {
-        height: auto;
-        overflow: visible;
+    /* ——— layout / scrolling ——— */
+    .app-container{
+      height: auto;
+      min-height: calc(100dvh - var(--btn-size-mobile));
+      overflow: visible;
+      padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top,0));
+      background-attachment: scroll;          /* was fixed on desktop */
     }
-
-    .app-container {
-        background-attachment: scroll;
-        /* fixed → scroll on mobile */
+  
+    /* kill the vignette + blend for mobile performance */
+    .app-container::before{
+      background: transparent;
+      mix-blend-mode: none;
     }
-
-    .app-container::before {
-        background: transparent;
-        mix-blend-mode: none;
+  
+    .home-main{
+      height: auto;
+      overflow: visible;
     }
-
-    .hero__title {
-        margin-top: 5vh;
+  
+    /* ——— hero tweaks ——— */
+    .hero__title{ margin-top: 5vh; }
+  
+    /* ——— feature grid tweaks ——— */
+    .feature-intro{
+      padding: var(--spacing-md);
     }
-
-    .feature-intro {
-        padding: var(--spacing-md);
+  
+    .feature-intro__list{
+      --card: min(450px,100%);
     }
-
-    .feature-intro__item::before {
-        --bevel: 18px;
+  
+    /* stretch cards without breaking the glow wrapper */
+    .feature-card__inner{
+      width: 100%;
+      max-width: 70vw;
+      margin-inline: auto;
     }
-
-    .feature-intro__list {
-        --card: min(450px, 100%);
-    }
-
-    .hero {
-        min-height: 30vh;
-    }
-
-    .feature-intro__item {
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 70vw;
-        align-self: center;
-        justify-self: center;
-    }
-}
+  }
