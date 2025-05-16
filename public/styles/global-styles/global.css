@@ -26,7 +26,8 @@
   --btn-size:            4rem;
 
   /* —— MOBILE SIZING —— */
-  --btn-size-mobile:     4rem;   /* keeps icons readable but shorter */
+  --btn-size-mobile:     3.5rem;   /* keeps icons readable but shorter */
+  --btn-size-mobile-mini:     3rem;
 }
 
 /*───────────────────────────────────────────────────────────────
@@ -249,6 +250,11 @@ body {
     height: auto;
   }
 
+  .nav-btn {
+    width: var(--btn-size-mobile);
+    height: var(--btn-size-mobile);
+  }
+
   /* Tool-tip positioning under icons */
   .nav-btn::after {
     top: calc(100% + var(--spacing-xs));
@@ -257,6 +263,22 @@ body {
     writing-mode: vertical-rl;
     text-orientation: upright;
     padding: var(--spacing-sm) var(--spacing-xs);
+  }
+}
+
+@media (max-width: 420px) {
+  #main-nav {
+    height: var(--btn-size-mobile-mini);
+  }
+
+  .nav-btn {
+    width: var(--btn-size-mobile-mini);
+    height: var(--btn-size-mobile-mini);
+  }
+
+  .chat-bubble {
+    transform: translateX(0%);
+    font-size: 1rem;
   }
 }
 
