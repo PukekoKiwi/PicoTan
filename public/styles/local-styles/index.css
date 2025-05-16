@@ -142,6 +142,7 @@
 .feature-intro {
     padding: var(--spacing-lg);
     width: clamp(320px, 90%, 1500px);
+    /*
     filter: drop-shadow( 1px  0   0   var(--accent-color))
             drop-shadow(-1px  0   0   var(--accent-color))
             drop-shadow( 0    1px 0   var(--accent-color))
@@ -152,6 +153,9 @@
                     drop-shadow( 0    1px 0   var(--accent-color))
                     drop-shadow( 0   -1px 0   var(--accent-color))
                     drop-shadow( 0    0   10px rgba(var(--accent), .3));
+                    */
+    filter: drop-shadow( 0  0   10px   white);
+    -webkit-filter: drop-shadow( 0  0   10px   white);
 }
 
 /* ───── grid of mini-cards ───── */
