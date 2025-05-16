@@ -12,6 +12,9 @@
     margin-left: var(--nav-width);
 
     /* from radicals color to base fill */
+    background-image: -o-linear-gradient(275deg,
+            var(--accent-color) -200%,
+            rgba(13, 15, 17, 1) 25%);
     background-image: linear-gradient(175deg,
             var(--accent-color) -200%,
             rgba(13, 15, 17, 1) 25%);
@@ -26,6 +29,10 @@
     inset: 0;
     pointer-events: none;
     background-size: 1024px 1024px;
+    background: -o-radial-gradient(75% 15%,
+            circle,
+            rgba(114, 105, 221, 0.08) 0%,
+            rgba(11, 21, 158, 0) 35%);
     background: radial-gradient(circle at 75% 15%,
             rgba(114, 105, 221, 0.08) 0%,
             rgba(11, 21, 158, 0) 35%);
@@ -38,6 +45,14 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
+
+    background-image:
+        url("/assets/images/white_noise_overlay.png"),
+        -o-repeating-linear-gradient(top,
+            rgba(255, 255, 255, 0.06) 0px,
+            rgba(255, 255, 255, 0.06) 3px,
+            transparent 3px,
+            transparent 6px);
 
     background-image:
         url("/assets/images/white_noise_overlay.png"),
@@ -64,10 +79,17 @@
   ----------------------------------------------------------------*/
 
 .home-main {
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
     /* stack hero + features */
-    flex-direction: column;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     /* centre horizontally */
     gap: var(--spacing-lg);
     /* equal spacing */
@@ -104,10 +126,19 @@
   ----------------------------------------------------------------*/
 .hero {
     min-height: 50vh;
+    display: -webkit-box;
+    display: -ms-flexbox;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+            flex-direction: column;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
     gap: var(--spacing-md);
     text-align: center;
     position: relative;
@@ -156,8 +187,11 @@
 
 /* ───── grid of mini-cards ───── */
 .feature-intro__list {
-    justify-content: center;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
     --card: min(200px, 100%);
+    display: -ms-grid;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--card), 1fr));
     gap: var(--spacing-lg);
@@ -174,8 +208,21 @@
     text-align: left;
     font-size: 1.5rem;
     line-height: 1.4;
+    -webkit-transition: -webkit-transform .05s;
+    transition: -webkit-transform .05s;
+    -o-transition: transform .05s;
     transition: transform .05s;
+    transition: transform .05s, -webkit-transform .05s;
     cursor: default;
+
+    background: -webkit-gradient(linear,
+            left top, right top,
+            from(var(--radicals-color)),
+            to(var(--yojijukugo-color)));
+
+    background: -o-linear-gradient(left,
+            var(--radicals-color) 0%,
+            var(--yojijukugo-color) 100%);
 
     background: linear-gradient(90deg,
             var(--radicals-color) 0%,
@@ -207,8 +254,18 @@
     position: absolute;
     inset: -1px;
     /* overlap border exactly */
-    clip-path: inherit;
+    -webkit-clip-path: inherit;
+            clip-path: inherit;
     /* reuse the same cut */
+    background: -webkit-gradient(linear,
+            left top, right top,
+            from(var(--radicals-color)),
+            color-stop(3%, var(--radicals-color)),
+            color-stop(3%, transparent));
+    background: -o-linear-gradient(left,
+            var(--radicals-color) 0%,
+            var(--radicals-color) 3%,
+            transparent 3%);
     background: linear-gradient(90deg,
             var(--radicals-color) 0%,
             var(--radicals-color) 3%,
@@ -220,12 +277,16 @@
 }
 
 .feature-intro__item:hover {
-    transform: translateY(-4px);
+    -webkit-transform: translateY(-4px);
+        -ms-transform: translateY(-4px);
+            transform: translateY(-4px);
     text-shadow: 0 0 12px var(--accent-color);
 }
 
 .feature-intro__item:hover::before {
-    box-shadow: 0 0 6px var(--accent-color),
+    -webkit-box-shadow: 0 0 6px var(--accent-color),
+        0 0 12px var(--accent-color);
+            box-shadow: 0 0 6px var(--accent-color),
         0 0 12px var(--accent-color);
 }
 
@@ -276,10 +337,14 @@
     }
 
     .feature-intro__item {
-        box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
         width: 100%;
         max-width: 70vw;
-        align-self: center;
-        justify-self: center;
+        -ms-flex-item-align: center;
+            -ms-grid-row-align: center;
+            align-self: center;
+        -ms-grid-column-align: center;
+            justify-self: center;
     }
 }
