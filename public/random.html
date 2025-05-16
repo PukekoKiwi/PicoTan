@@ -14,11 +14,12 @@
 
   <!-- Styling -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
-  <link rel="stylesheet" href="styles/global.css" />
+  <link rel="stylesheet" href="styles/global-styles/global.css" />
 
   <!-- Sitewide Scripts -->
   <script type="module" src="scripts/main.js"></script>
   <script type="module" src="scripts/logout.js"></script>
+  <script type="module" src="scripts/uiGlitch.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
 </head>
 
@@ -27,7 +28,7 @@
   <!-- Side Bar Navigation -->
   <nav id="main-nav">
     <div class="nav-section nav-top" style="position: relative;">
-      <button id="nav-account-btn" class="nav-btn" data-tooltip="アカウント"><i class="fa-regular fa-circle-user"></i></button>
+      <button id="nav-account-btn" class="nav-btn no-tooltip" data-tooltip="アカウント"><i class="fa-regular fa-circle-user"></i></button>
       <div id="account-menu" class="account-menu hidden">
         <button id="login-btn" class="menu-item">ログイン</button>
         <button id="logout-btn" class="menu-item">ログアウト</button>
@@ -41,7 +42,7 @@
     </div>
     <div class="nav-section nav-bottom">
       <div class="picotan-widget">
-        <a href="index.html" class="picotan-icon"><i class="fa-regular fa-smile"></i></a>
+        <button id="nav-home-btn" data-target="index.html" class="nav-btn no-tooltip picotan-icon" data-tooltip="ホーム"><i class="fa-regular fa-smile"></i></button>
         <div class="chat-bubble" id="greeting-message">頑張って！</div>
       </div>
     </div>
