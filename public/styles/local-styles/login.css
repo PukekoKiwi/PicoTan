@@ -1,0 +1,260 @@
+/*---------------------------------------------------------------
+  0. SCANLINE OVERLAY  –  applies once at root of main area
+----------------------------------------------------------------*/
+.app-container {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    margin-left: var(--nav-width);
+
+    /* from radicals color to base fill */
+    background-image: linear-gradient(185deg,
+            var(--accent-color) -200%,
+            rgba(13, 15, 17, 1) 25%);
+
+    background-attachment: fixed;
+    background-size: cover;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.app-container::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-size: 1024px 1024px;
+    background: radial-gradient(circle at 25% 85%,
+            rgba(114, 105, 221, 0.08) 0%,
+            rgba(11, 21, 158, 0) 35%);
+    z-index: 4000;
+}
+
+.app-container::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+
+    background-image:
+        url("/assets/images/white_noise_overlay.png"),
+        repeating-linear-gradient(to bottom,
+            rgba(255, 255, 255, 0.06) 0px,
+            rgba(255, 255, 255, 0.06) 3px,
+            transparent 3px,
+            transparent 6px);
+    mix-blend-mode: soft-light;
+    z-index: 5000;
+    /* above vignette but below nav */
+}
+
+.login-main {
+    max-width: 70vw;
+    box-sizing: border-box;
+    margin-bottom: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    filter: drop-shadow(1px 0 0 var(--accent-color)) 
+    drop-shadow(-1px 0 0 var(--accent-color)) 
+    drop-shadow(0 1px 0 var(--accent-color)) 
+    drop-shadow(0 -1px 0 var(--accent-color)) 
+    drop-shadow(0 0 10px rgba(var(--accent), .3));
+    
+    -webkit-filter: drop-shadow(1px 0 0 var(--accent-color)) 
+                drop-shadow(-1px 0 0 var(--accent-color)) 
+                drop-shadow(0 1px 0 var(--accent-color)) 
+                drop-shadow(0 -1px 0 var(--accent-color)) 
+                drop-shadow(0 0 10px rgba(var(--accent), .3));
+    position: relative;
+    /* keeps ::after of inner in place */
+}
+
+.login-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    padding: 40px 20px 20px 20px;
+    background-color: rgb(15, 15, 19);
+    clip-path: polygon(100% 0,
+    15% 0,
+    10% 7%,
+    0% 7%,
+    0 95%,
+    2% 100%,
+    95% 100%,
+    100% 90%);
+    -webkit-clip-path: polygon(100% 0,
+    15% 0,
+    10% 7%,
+    0% 7%,
+    0 95%,
+    2% 100%,
+    95% 100%,
+    100% 90%);
+}
+
+.login-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+.login-label {
+    display: none;
+}
+
+.login-input {
+    font-family: "Yu Gothic", "Meiryo", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    box-sizing: border-box;
+    width: 100%;
+    padding: 1rem 1rem 1rem 0.75rem;
+    border: 1.5px solid #44485a;
+    border-radius: 8px;
+    background: #23243a;
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    transition: border 0.2s;
+    margin-bottom: 0;
+}
+
+:-webkit-autofill {
+    filter: none;
+    box-shadow: 0 0 0 100px var(--accent-color) inset;
+}
+
+.login-input:focus {
+    border-color: var(--accent-color, #7269dd);
+    background: #23243a;
+}
+
+.login-input::placeholder {
+    color: #b0b2c3;
+    opacity: 1;
+    font-size: 1rem;
+}
+
+#username::placeholder {
+    content: "ユーザー名";
+}
+
+#password::placeholder {
+    content: "パスワード";
+}
+
+
+.login-button {
+    --background-color: rgb(15, 15, 19);
+    --border-color: linear-gradient(to bottom right, var(--accent-color), var(--accent-color));
+    --border-width: 0.1em;
+    --edge-size: 0.5em;
+
+    cursor: pointer;
+    background: var(--background-color);
+    padding: 0.5em 1.5em;
+    border: 0;
+    position: relative;
+    isolation: isolate;
+    display: inline-grid;
+    place-content: center;
+    clip-path: polygon(var(--edge-size) 0%,
+            100% 0,
+            100% calc(100% - var(--edge-size)),
+            calc(100% - var(--edge-size)) 100%,
+            0 100%,
+            0% var(--edge-size));
+
+    font-size: 1.1rem;
+    font-weight: 600;
+
+    transition: color .05s, background .25s;
+
+    color: var(--accent-color);
+}
+
+.login-button::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--border-color);
+    z-index: -2;
+    transition: background .25s;
+}
+
+.login-button::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: var(--background-color);
+    z-index: -1;
+    clip-path: polygon(var(--border-width) calc(var(--edge-size) + var(--border-width) * 0.5),
+
+            calc(var(--edge-size) + var(--border-width) * 0.5) var(--border-width),
+
+            calc(100% - var(--border-width)) var(--border-width),
+
+            calc(100% - var(--border-width)) calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5)),
+
+            calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
+
+            calc(var(--border-width)) calc(100% - var(--border-width)));
+}
+
+.login-button:hover {
+    color: var(--text-color);
+  }
+
+.login-button:hover::after {
+    background: rgb(17, 17, 21);
+}
+
+.login-button:hover::before {
+    background: linear-gradient(to bottom right, var(--accent-color), var(--words-color));
+    filter: brightness(1.3);
+}
+
+.login-message {
+    margin-top: 1.2rem;
+    color: var(--accent-color);
+    font-size: 1rem;
+    min-height: 1.2em;
+    text-align: center;
+    font-family: Consolas, monospace;   /* monospace vibe   */
+    letter-spacing: .04em;
+    font-size: 1.05rem;                              /* a hair larger    */
+    text-shadow: 0 0 6px rgba(var(--accent), .35);   /* faint glow       */
+    min-height: 1.4em;                               /* reserve a line   */
+    position: relative;                              /* ↓ places cursor  */
+  }
+  
+  /* blinking block cursor (visible when .idle) */
+  .login-message.idle::after {
+    content: "";
+    position: absolute;
+    right: -0.75em;
+    top: 0;
+    width: 0.55em;
+    height: 1.2em;
+    background: var(--accent-color);
+    animation: blink 1s steps(1) infinite;
+  }
+  
+  @keyframes blink { 50% { opacity: 0; } }
+
+/* ---------------------------------------------------------------
+  MOBILE STYLES
+----------------------------------------------------------------*/
+
+@media (max-width: 768px) {
+    .app-container {
+        margin-left: 0;
+        padding-top: var(--btn-size-mobile);
+    }
+}

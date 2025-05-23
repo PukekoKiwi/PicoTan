@@ -6,55 +6,55 @@
   0. SCANLINE OVERLAY  –  applies once at root of main area
 ----------------------------------------------------------------*/
 .app-container {
-    position: relative;
-    height: 100vh;
-    overflow: hidden;
-    margin-left: var(--nav-width);
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+  margin-left: var(--nav-width);
 
-    /* from radicals color to base fill */
-    background-image: linear-gradient(175deg,
-            var(--accent-color) -200%,
-            rgba(13, 15, 17, 1) 25%);
+  /* from radicals color to base fill */
+  background-image: linear-gradient(175deg,
+      var(--accent-color) -200%,
+      rgba(13, 15, 17, 1) 25%);
 
-    background-attachment: fixed;
-    background-size: cover;
+  background-attachment: fixed;
+  background-size: cover;
 }
 
 .app-container::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background-size: 1024px 1024px;
-    background: radial-gradient(circle at 75% 15%,
-            rgba(114, 105, 221, 0.08) 0%,
-            rgba(11, 21, 158, 0) 35%);
-    z-index: 4000;
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-size: 1024px 1024px;
+  background: radial-gradient(circle at 75% 15%,
+      rgba(114, 105, 221, 0.08) 0%,
+      rgba(11, 21, 158, 0) 35%);
+  z-index: 4000;
 }
 
 .app-container::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 
-    background-image:
-        url("/assets/images/white_noise_overlay.png"),
-        repeating-linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.06) 0px,
-            rgba(255, 255, 255, 0.06) 3px,
-            transparent 3px,
-            transparent 6px);
-    mix-blend-mode: soft-light;
-    z-index: 5000;
-    /* above vignette but below nav */
+  background-image:
+    url("/assets/images/white_noise_overlay.png"),
+    repeating-linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.06) 0px,
+      rgba(255, 255, 255, 0.06) 3px,
+      transparent 3px,
+      transparent 6px);
+  mix-blend-mode: soft-light;
+  z-index: 5000;
+  /* above vignette but below nav */
 }
 
 @media (max-width: 768px) {
-    .app-container {
-        margin-left: 0;
-        padding-top: var(--btn-size-mobile);
-    }
+  .app-container {
+    margin-left: 0;
+    padding-top: var(--btn-size-mobile);
+  }
 }
 
 
@@ -63,219 +63,226 @@
   ----------------------------------------------------------------*/
 
 .home-main {
-    display: flex;
-    /* stack hero + features */
-    flex-direction: column;
-    align-items: center;
-    /* centre horizontally */
-    gap: var(--spacing-lg);
-    /* equal spacing */
-    max-width: clamp(1000px, 80vw, 1900px);
-    /* optional hard cap */
-    margin-inline: auto;
-    /* centre inside .app-container */
+  display: flex;
+  /* stack hero + features */
+  flex-direction: column;
+  align-items: center;
+  /* centre horizontally */
+  gap: var(--spacing-lg);
+  /* equal spacing */
+  max-width: clamp(1000px, 80vw, 1900px);
+  /* optional hard cap */
+  margin-inline: auto;
+  /* centre inside .app-container */
 }
 
 /* Optional: cyber-scrollbar styling (WebKit/Blink) */
 .home-main::-webkit-scrollbar {
-    width: 4px;
+  width: 4px;
 }
 
 .home-main::-webkit-scrollbar-track {
-    background: transparent;
+  background: transparent;
 }
 
 .home-main::-webkit-scrollbar-thumb {
-    background: var(--accent-color);
-    border-radius: 2px;
+  background: var(--accent-color);
+  border-radius: 2px;
 }
 
 /* Small-screen height compensation for the top bar */
 @media (max-width:768px) {
-    .home-main {
-        height: calc(100% - var(--btn-size-mobile));
-        /* subtract top nav */
-    }
+  .home-main {
+    height: calc(100% - var(--btn-size-mobile));
+    /* subtract top nav */
+  }
 }
 
 /*---------------------------------------------------------------
     2. HERO SECTION
   ----------------------------------------------------------------*/
 .hero {
-    min-height: 50vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: var(--spacing-md);
-    text-align: center;
-    position: relative;
+  min-height: 50vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-md);
+  text-align: center;
+  position: relative;
 }
 
 .hero__title {
-    margin-top: 200px;
-    font-size: clamp(2.5rem, 4vw + 1rem, 6rem);
-    line-height: 1.1;
-    font-weight: 700;
-    letter-spacing: 0.03em;
-    text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
+  margin-top: 200px;
+  font-size: clamp(2.5rem, 4vw + 1rem, 6rem);
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 6px rgba(0, 255, 255, 0.6);
 }
 
 .hero__pico {
-    color: var(--accent-color);
-    text-shadow:
-        0 0 4px var(--accent-color),
-        0 0 12px var(--accent-color);
+  color: var(--accent-color);
+  text-shadow:
+    0 0 4px var(--accent-color),
+    0 0 12px var(--accent-color);
 }
 
 .hero__subtitle {
-    font-size: clamp(1rem, 1.2vw + .6rem, 1.25rem);
-    color: rgba(255, 255, 255, 0.8);
-    text-shadow: 0 0 3px rgba(0, 255, 255, 0.25);
-    max-width: 36ch;
+  font-size: clamp(1rem, 1.2vw + .6rem, 1.25rem);
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 0 3px rgba(0, 255, 255, 0.25);
+  max-width: 36ch;
 }
 
 /*---------------------------------------------------------------
     3. FEATURE SECTION   (convex cut-corners + glow wrapper)
 ----------------------------------------------------------------*/
 .feature-intro {
-    padding: var(--spacing-lg);
-    width: clamp(320px, 90%, 1500px);
-  }
-  
-  /* ───── responsive grid ───── */
-  .feature-intro__list {
-    --card: min(200px, 100%);
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(var(--card), 1fr));
-    gap: var(--spacing-lg);
-    justify-content: center;
-    margin: 0 0 var(--spacing-lg);
-    padding: 0;
-    list-style: none;
-  }
-  
-  /* -------- wrapper that holds ALL drop-shadows (no movement) ---- */
-  .feature-card {
-    filter: drop-shadow( 1px  0   0   var(--accent-color))
-            drop-shadow(-1px  0   0   var(--accent-color))
-            drop-shadow( 0    1px 0   var(--accent-color))
-            drop-shadow( 0   -1px 0   var(--accent-color))
-            drop-shadow( 0    0  10px rgba(var(--accent), .3));
-    -webkit-filter: drop-shadow( 1px  0   0   var(--accent-color))
-                    drop-shadow(-1px  0   0   var(--accent-color))
-                    drop-shadow( 0    1px 0   var(--accent-color))
-                    drop-shadow( 0   -1px 0   var(--accent-color))
-                    drop-shadow( 0    0  10px rgba(var(--accent), .3));
-    position: relative;        /* keeps ::after of inner in place */
-  }
-  
-  /* -------- inner card that actually moves on hover -------------- */
-  .feature-card__inner {
-    position: relative;
-    padding: var(--spacing-lg) calc(var(--spacing-md) + 5px);
-    padding-left: calc(var(--spacing-md) + 10px);
-    font-size: 1.5rem;
-    line-height: 1.4;
-    text-align: left;
-    background: rgba(13, 15, 17, 0.95);
-    transition: transform .05s;
-    cursor: default;
-  
-    /* cut-corner mask */
-    clip-path: polygon(100% 0,
-                       15% 0,
-                       10% 10%,
-                       0% 10%,
-                       0 95%,
-                       2% 100%,
-                       95% 100%,
-                       100% 90%);
-    -webkit-clip-path: polygon(100% 0,
-                               15% 0,
-                               10% 10%,
-                               0% 10%,
-                               0 95%,
-                               2% 100%,
-                               95% 100%,
-                               100% 90%);
-    /*                        
+  padding: var(--spacing-lg);
+  width: clamp(320px, 90%, 1500px);
+}
+
+/* ───── responsive grid ───── */
+.feature-intro__list {
+  --card: min(200px, 100%);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(var(--card), 1fr));
+  gap: var(--spacing-lg);
+  justify-content: center;
+  margin: 0 0 var(--spacing-lg);
+  padding: 0;
+  list-style: none;
+}
+
+/* -------- wrapper that holds ALL drop-shadows (no movement) ---- */
+.feature-card {
+  filter: drop-shadow(1px 0 0 var(--accent-color)) 
+          drop-shadow(-1px 0 0 var(--accent-color)) 
+          drop-shadow(0 1px 0 var(--accent-color)) 
+          drop-shadow(0 -1px 0 var(--accent-color)) 
+          drop-shadow(0 0 10px rgba(var(--accent), .3));
+          
+  -webkit-filter: drop-shadow(1px 0 0 var(--accent-color)) 
+                  drop-shadow(-1px 0 0 var(--accent-color)) 
+                  drop-shadow(0 1px 0 var(--accent-color)) 
+                  drop-shadow(0 -1px 0 var(--accent-color)) 
+                  drop-shadow(0 0 10px rgba(var(--accent), .3));
+  position: relative;
+  /* keeps ::after of inner in place */
+}
+
+/* -------- inner card that actually moves on hover -------------- */
+.feature-card__inner {
+  position: relative;
+  padding: var(--spacing-lg) calc(var(--spacing-md) + 5px);
+  padding-left: calc(var(--spacing-md) + 10px);
+  font-size: 1.5rem;
+  line-height: 1.4;
+  text-align: left;
+  background: rgba(13, 15, 17, 0.95);
+  transition: transform .05s;
+  cursor: default;
+
+  /* cut-corner mask */
+  clip-path: polygon(100% 0,
+      15% 0,
+      10% 10%,
+      0% 10%,
+      0 95%,
+      2% 100%,
+      95% 100%,
+      100% 90%);
+  -webkit-clip-path: polygon(100% 0,
+      15% 0,
+      10% 10%,
+      0% 10%,
+      0 95%,
+      2% 100%,
+      95% 100%,
+      100% 90%);
+  /*                        
     background-image: linear-gradient(90deg,
                                       var(--radicals-color) 0%,
                                       var(--yojijukugo-color) 100%);
                                       */
-  }
-  
-  /* neon rim */
-  .feature-card__inner::after {
-    content: "";
-    position: absolute;
-    inset: -1px;
-    clip-path: inherit;
-    background: linear-gradient(90deg,
-                                var(--radicals-color) 0%,
-                                var(--radicals-color) 3%,
-                                transparent 3%);
-    mix-blend-mode: screen;
-    pointer-events: none;
-    z-index: -1;
-    opacity: .3;
-  }
-  
-  /* hover animation */
-  .feature-card__inner:hover {
-    transform: translateY(-4px);
-  }
+}
+
+/* neon rim */
+.feature-card__inner::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  clip-path: inherit;
+  background: linear-gradient(90deg,
+      var(--radicals-color) 0%,
+      var(--radicals-color) 3%,
+      transparent 3%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  z-index: -1;
+  opacity: .3;
+}
+
+/* hover animation */
+.feature-card__inner:hover {
+  transform: translateY(-4px);
+}
 
 /*---------------------------------------------------------------
     4. SMALL-SCREEN ADJUSTMENTS  (≤ 768 px)
 ----------------------------------------------------------------*/
 @media (max-width: 768px) {
 
-    /* ——— layout / scrolling ——— */
-    .app-container{
-      height: auto;
-      min-height: calc(100dvh - var(--btn-size-mobile));
-      overflow: visible;
-      padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top,0));
-      background-attachment: scroll;          /* was fixed on desktop */
-    }
-  
-    /* kill the vignette + blend for mobile performance */
-    .app-container::before{
-      background: transparent;
-      mix-blend-mode: none;
-    }
-  
-    .home-main{
-      height: auto;
-      overflow: visible;
-    }
-  
-    /* ——— hero tweaks ——— */
-    .hero__title{ margin-top: 5vh; }
-  
-    /* ——— feature grid tweaks ——— */
-    .feature-intro{
-      padding: var(--spacing-md);
-    }
-  
-    .feature-intro__list{
-      --card: min(450px,100%);
-    }
-  
-    /* stretch cards without breaking the glow wrapper */
-    .feature-card__inner{
-      width: 100%;
-      max-width: 70vw;
-      margin-inline: auto;
-    }
+  /* ——— layout / scrolling ——— */
+  .app-container {
+    height: auto;
+    min-height: calc(100dvh - var(--btn-size-mobile));
+    overflow: visible;
+    padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
+    background-attachment: scroll;
+    /* was fixed on desktop */
   }
 
-  /* Improve performance while not making dumb GPU crash stuff happen on mobile */
-  @media (hover:hover){                 /* desktop / laptop */
-    .feature-card__inner:hover{
-      transform: translateY(-4px);
-      will-change: transform;
-    }
+  /* kill the vignette + blend for mobile performance */
+  .app-container::before {
+    background: transparent;
+    mix-blend-mode: none;
   }
+
+  .home-main {
+    height: auto;
+    overflow: visible;
+  }
+
+  /* ——— hero tweaks ——— */
+  .hero__title {
+    margin-top: 5vh;
+  }
+
+  /* ——— feature grid tweaks ——— */
+  .feature-intro {
+    padding: var(--spacing-md);
+  }
+
+  .feature-intro__list {
+    --card: min(450px, 100%);
+  }
+
+  /* stretch cards without breaking the glow wrapper */
+  .feature-card__inner {
+    width: 100%;
+    max-width: 70vw;
+    margin-inline: auto;
+  }
+}
+
+/* Improve performance while not making dumb GPU crash stuff happen on mobile */
+@media (hover:hover) {
+
+  /* desktop / laptop */
+  .feature-card__inner:hover {
+    transform: translateY(-4px);
+    will-change: transform;
+  }
+}

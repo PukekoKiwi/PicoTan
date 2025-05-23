@@ -15,6 +15,7 @@
   <!-- Styling -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="styles/global-styles/global.css" />
+  <link rel="stylesheet" href="styles/local-styles/login.css" />
 
   <!-- Sitewide Scripts -->
   <script type="module" src="scripts/main.js"></script>
@@ -55,13 +56,12 @@
   <div class="app-container">
     <main class="login-main">
       <section class="login-container">
-        <h1 class="login-title">ログイン</h1>
         <form id="loginForm" class="login-form">
           <label for="username" class="login-label">ユーザー名:</label>
-          <input type="text" id="username" name="username" class="login-input" required />
+          <input type="text" id="username" name="username" class="login-input" placeholder="ユーザー名" required />
 
           <label for="password" class="login-label">パスワード:</label>
-          <input type="password" id="password" name="password" class="login-input" required />
+          <input type="password" id="password" name="password" class="login-input" placeholder="パスワード" required />
 
           <button type="submit" class="login-button">ログイン</button>
         </form>
