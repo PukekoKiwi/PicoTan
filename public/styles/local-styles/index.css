@@ -135,6 +135,16 @@
   max-width: 36ch;
 }
 
+/* accent baseline under title */
+.hero::after {
+  content: '';
+  width: min(520px, 60vw);
+  height: 2px;
+  margin-top: .25rem;
+  background: linear-gradient(90deg, transparent 0%, var(--accent-color) 35%, var(--words-color) 65%, transparent 100%);
+  filter: drop-shadow(0 0 6px rgba(var(--accent) / .35));
+}
+
 /*---------------------------------------------------------------
     3. FEATURE SECTION   (convex cut-corners + glow wrapper)
 ----------------------------------------------------------------*/

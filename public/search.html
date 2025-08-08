@@ -58,29 +58,31 @@
       <section class="search-controls">
         <h1 class="search-controls__title">データベースを検索</h1>
 
-        <div class="search-controls__form">
-          <label for="search-type">検索モード:</label>
-          <select id="search-type" class="search-controls__select">
-            <option value="radicals">部首</option>
-            <option value="kanji">漢字</option>
-            <option value="words">言葉</option>
-            <option value="yojijukugo">四字熟語</option>
-            <option value="kotowaza">諺</option>
-            <option value="sentences">例文</option>
-          </select>
+        <div class="search-controls__form-wrapper">
+          <div class="search-controls__form">
+            <label for="search-type">検索モード:</label>
+            <select id="search-type" class="search-controls__select">
+              <option value="radicals">部首</option>
+              <option value="kanji">漢字</option>
+              <option value="words">言葉</option>
+              <option value="yojijukugo">四字熟語</option>
+              <option value="kotowaza">諺</option>
+              <option value="sentences">例文</option>
+            </select>
 
-          <!-- Simple Search -->
-          <div id="simple-search" class="search-mode">
-            <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
+            <!-- Simple Search -->
+            <div id="simple-search" class="search-mode">
+              <input type="text" id="search-input" class="search-controls__input" placeholder="入力待ち..." />
+            </div>
+
+            <!-- Advanced Search -->
+            <div id="advanced-search" class="search-mode hidden">
+              <!-- Dynamically rendered fields go here -->
+            </div>
+
+            <button id="toggle-advanced" class="search-controls__toggle">詳細検索</button>
+            <button id="search-btn" class="search-controls__button">検索</button>
           </div>
-
-          <!-- Advanced Search -->
-          <div id="advanced-search" class="search-mode hidden">
-            <!-- Dynamically rendered fields go here -->
-          </div>
-
-          <button id="toggle-advanced" class="search-controls__toggle">詳細検索</button>
-          <button id="search-btn" class="search-controls__button">検索</button>
         </div>
       </section>
 
