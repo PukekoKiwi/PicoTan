@@ -65,9 +65,15 @@ export async function readEntries({ operation, collectionName, ids, indexValues,
       if (!indexField) {
         throw new Error(`Collection '${collectionName}' does not support index-based lookups.`);
       }
-    
+
       const query = { [indexField]: { $in: indexValues } };
-      return db.collection(collectionName).find(query).toArray();
+      const results = await db.collection(collectionName).find(query).toArray();
+
+      // Preserve the order of indexValues in the returned array
+      const resultsByIndex = new Map(
+        results.map((doc) => [doc[indexField], doc])
+      );
+      return indexValues.map((val) => resultsByIndex.get(val) || null);
     }
 
     /**
