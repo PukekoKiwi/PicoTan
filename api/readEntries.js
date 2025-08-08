@@ -1,4 +1,4 @@
-import { readEntries } from "./database";
+import { readEntries } from "./database.js";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {

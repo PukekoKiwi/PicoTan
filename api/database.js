@@ -1,5 +1,5 @@
 import { ObjectId } from "mongodb";
-import connectMongo from "./connectMongo";
+import connectMongo from "./connectMongo.js";
 
 const validCollections = [
   "radicals",
