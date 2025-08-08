@@ -1,6 +1,17 @@
 /**
- * Builds bracket notation for a list of segments, e.g.:
+ * furiganaUtils.js
+ * -----------------
+ * Utility helpers for dealing with furigana (pronunciation guides).  The
+ * functions in this module parse text into segments, allow merging/splitting of
+ * kanji groups, and produce the bracket notation used by the database.
+ */
+
+/**
+ * Build bracket notation for a list of segments, for example:
  *   [漢](かん)[字](じ)
+ *
+ * @param {Array<Object>} segments - Parsed segments from `parseIntoSegments`.
+ * @returns {string} Bracket notation representing the furigana markup.
  */
 export function buildFuriganaString(segments) {
     return segments
@@ -14,8 +25,12 @@ export function buildFuriganaString(segments) {
   }
   
   /**
-   * Splits a string into segments: each Kanji is a separate segment,
-   * everything else is lumped as one segment (until next Kanji).
+   * Split a string into segments.  Each kanji becomes its own segment while
+   * consecutive non‑kanji characters are grouped together.  The result is an
+   * array that can later be decorated with furigana.
+   *
+   * @param {string} baseText - The raw text to analyse.
+   * @returns {Array<Object>} Array of segment objects.
    */
   export function parseIntoSegments(baseText) {
     const segments = [];

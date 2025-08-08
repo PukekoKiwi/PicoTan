@@ -1,3 +1,12 @@
+/**
+ * addEntry.js
+ * ------------
+ * Provides a small data-entry console used by administrators to add new
+ * documents (radicals, kanji, words, etc.) to the database.  The script
+ * renders different input forms based on the selected entry type and submits
+ * the resulting object via the write helpers.
+ */
+
 import {
   renderRadicalForm,
   renderKanjiForm,
@@ -25,6 +34,11 @@ import {
   addKotowaza,
 } from "./helpers/dbUtils.js";
 
+// ---------------------------------------------------------------------------
+// Grab references to important DOM nodes and the stored JSON Web Token.  The
+// token is required for any write operation, so if it is missing we simply
+// hide the interface.
+// ---------------------------------------------------------------------------
 const jwtToken = localStorage.getItem("picotan_jwt");
 const entryTypeSelect = document.getElementById("entry-type");
 const entryFieldsContainer = document.getElementById("entry-fields");
@@ -32,7 +46,7 @@ const saveBtn = document.getElementById("save-btn");
 const outputContainer = document.getElementById("output-container");
 
 document.addEventListener("DOMContentLoaded", () => {
-  // If no JWT, hide form
+  // If no JWT, hide the entry form and show a friendly message instead.
   if (!jwtToken) {
     if (entryTypeSelect) entryTypeSelect.style.display = "none";
     if (saveBtn) saveBtn.style.display = "none";
@@ -40,10 +54,13 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Restore the previously used entry type so the user can continue where they
+  // left off between sessions.
   let lastMode = localStorage.getItem("picotan-addEntryMode") || "radical";
   entryTypeSelect.value = lastMode;
   renderForm(lastMode);
 
+  // Re-render the form when the selection changes and remember the choice.
   entryTypeSelect.addEventListener("change", () => {
     const newVal = entryTypeSelect.value;
     localStorage.setItem("picotan-addEntryMode", newVal);
@@ -54,6 +71,11 @@ document.addEventListener("DOMContentLoaded", () => {
   saveBtn.addEventListener("click", handleSave);
 });
 
+/**
+ * Render the appropriate input fields for the chosen document type.
+ *
+ * @param {string} type - One of "radical", "kanji", "word", etc.
+ */
 function renderForm(type) {
   entryFieldsContainer.innerHTML = "";
   switch (type) {
@@ -81,6 +103,10 @@ function renderForm(type) {
   }
 }
 
+/**
+ * Build a document object from the current form and send it to the server via
+ * the appropriate helper.  Errors are displayed inline for easy debugging.
+ */
 async function handleSave() {
   clearOutput();
   const type = entryTypeSelect.value;

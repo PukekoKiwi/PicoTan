@@ -1,28 +1,52 @@
-/* ──────────────────────────────────────────────────────────
-   LOGIN PAGE SCRIPT  –  cyber-terminal style
-───────────────────────────────────────────────────────────*/
+/**
+ * login.js
+ * ---------
+ * Behaviour for the login page. The script reads the username and password
+ * from the form, sends them to the server, and shows a "terminal" style
+ * status message while waiting for the response.  No business logic lives
+ * here—only small helpers to keep the interface responsive and friendly for
+ * newcomers.
+ */
 
-// ── 1. DOM references ────────────────────────────────────
+// ---------------------------------------------------------------------------
+// 1. DOM references
+//    Cache elements that we need more than once.  Grabbing them up front keeps
+//    event handlers simple and avoids repeated document look‑ups.
+// ---------------------------------------------------------------------------
 const loginForm     = document.querySelector("#loginForm");
 const loginMessage  = document.querySelector("#loginMessage");
 const usernameInput = document.querySelector("#username");
 const passwordInput = document.querySelector("#password");
 
-// ── 2. ASCII-spinner factory  ────────────────────────────
+// ---------------------------------------------------------------------------
+// 2. ASCII-spinner factory
+//    Displays a little rotating glyph while the network request is pending.
+//    The function returns a `stop()` callback so the caller can easily halt
+//    the spinner once the request finishes.
+// ---------------------------------------------------------------------------
 function makeSpinner(el, prefix = "> 接続中 ") {
-  const frames = ["-", "\\", "|", "/"];      // (escape the back-slash)
+  const frames = ["-", "\\", "|", "/"]; // characters for the spinner
   let i = 0;
   const id = setInterval(() => {
     el.textContent = prefix + frames[i++ % frames.length];
-  }, 120);                                   // ≈ 8 fps
-  return () => clearInterval(id);            // returns stop() handle
+  }, 120); // roughly 8 frames per second
+  return () => clearInterval(id); // give back a handle to stop the spinner
 }
 
-// ── 3. Initialize idle prompt ────────────────────────────
+// ---------------------------------------------------------------------------
+// 3. Initial idle prompt
+//    Show the user that the page is ready and waiting for input.  CSS supplies
+//    the blinking cursor effect via the "idle" class.
+// ---------------------------------------------------------------------------
 loginMessage.textContent = "> 待機中";
 loginMessage.classList.add("idle");          // blinking cursor via CSS
 
-// ── 4. Form submit handler ───────────────────────────────
+// ---------------------------------------------------------------------------
+// 4. Form submit handler
+//    Prevent the default form submission, show the spinner, send the
+//    credentials to the server and handle the JSON response.  Everything is
+//    wrapped in a try/catch to keep the UI consistent even on network errors.
+// ---------------------------------------------------------------------------
 loginForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 

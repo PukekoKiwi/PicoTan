@@ -1,4 +1,12 @@
-// search.js
+/**
+ * search.js
+ * ---------
+ * Implements the search page.  Users can perform a quick "simple" search or
+ * switch to an "advanced" mode with multiple fields.  This file wires up the
+ * form controls, performs client-side validation, and calls the database
+ * helper functions that communicate with the server.
+ */
+
 import {
   // from dbUtils.js
   getRadicalEntriesThatMatch,
@@ -14,7 +22,9 @@ import {
   getSentenceEntriesThatContainTheWord
 } from "./helpers/dbUtils.js";
 
+// ---------------------------------------------------------------------------
 // DOM references
+// ---------------------------------------------------------------------------
 const searchTypeSelect = document.getElementById("search-type");
 const searchInput = document.getElementById("search-input");
 const searchBtn = document.getElementById("search-btn");
@@ -23,9 +33,11 @@ const simpleSearchContainer = document.getElementById("simple-search");
 const advancedSearchContainer = document.getElementById("advanced-search");
 const resultsContainer = document.getElementById("results-container");
 
+// ---------------------------------------------------------------------------
 // State
-let inAdvancedMode = false;
-let kankenRadicalsSet = null; // We'll store the loaded radicals here
+// ---------------------------------------------------------------------------
+let inAdvancedMode = false;           // tracks whether advanced form is shown
+let kankenRadicalsSet = null;         // cache of valid radicals for searches
 
 document.addEventListener("DOMContentLoaded", async () => {
   // 1) Load the single-line radicals from /data/radicals.txt
@@ -42,8 +54,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 /**
- * Loads radicals from a single-line file, e.g. "乀乁一丨丶丿乙..."
- * We'll remove any accidental newlines and split by each char.
+ * Fetch a plain text file that contains all radicals in one long string and
+ * turn it into a `Set` for quick membership checks.  The file may contain
+ * stray whitespace, which is stripped out before splitting into individual
+ * characters.
+ *
+ * @param {string} url - Path to the radicals text file.
+ * @returns {Promise<Set<string>>} A set of radical characters.
  */
 async function loadRadicalsSet(url) {
   try {

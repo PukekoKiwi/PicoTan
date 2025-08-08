@@ -1,6 +1,14 @@
+/**
+ * connectMongo.js
+ * ---------------
+ * Helper that manages the MongoDB connection.  In serverless environments the
+ * connection is cached between invocations so subsequent requests reuse the
+ * same client.
+ */
+
 import { MongoClient, ServerApiVersion } from "mongodb";
 
-// Use a global variable to persist the client between serverless invocations
+// Use a module-level variable to persist the client between serverless runs
 let clientPromise;
 
 /**

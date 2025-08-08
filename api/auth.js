@@ -1,3 +1,11 @@
+/**
+ * auth.js
+ * -------
+ * Simple Express-style middleware used by the serverless endpoints to verify
+ * JSON Web Tokens.  If a valid token is present the decoded payload is attached
+ * to `req.user`.
+ */
+
 import jwt from "jsonwebtoken";
 
 const SECRET_KEY = process.env.JWT_SECRET;
