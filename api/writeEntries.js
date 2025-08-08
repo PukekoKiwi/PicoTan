@@ -1,5 +1,5 @@
-import { authenticate } from "./auth";
-import { writeEntries } from "./database";
+import { authenticate } from "./auth.js";
+import { writeEntries } from "./database.js";
 import { Double } from "mongodb";
 
 /**

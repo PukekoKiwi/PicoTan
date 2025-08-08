@@ -347,8 +347,10 @@ export async function getMinKankenLevelForWords(wordsArray, defaultLevel = 10) {
   const docs = await getWordEntries(wordsArray);
   if (!docs.length) return defaultLevel;
 
-  // doc.kanken_level might be a float (like 1.5). Safely do .map(d => d.kanken_level || 10)
-  const minLevel = Math.min(...docs.map(d => d.kanken_level ?? defaultLevel));
+  // doc.kanken_level might be a float (like 1.5). Safely handle missing docs.
+  const minLevel = Math.min(
+    ...docs.map((d) => d?.kanken_level ?? defaultLevel)
+  );
   return minLevel;
 }
 
@@ -362,7 +364,9 @@ export async function getMinKankenLevelForKanji(kanjiArray, defaultLevel = 10) {
   const docs = await getKanjiEntries(kanjiArray);
   if (!docs.length) return defaultLevel;
 
-  const minLevel = Math.min(...docs.map(d => d.kanken_level ?? defaultLevel));
+  const minLevel = Math.min(
+    ...docs.map((d) => d?.kanken_level ?? defaultLevel)
+  );
   return minLevel;
 }
 
