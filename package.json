@@ -4,7 +4,7 @@
   "type": "module",
   "description": "A kanji kentei study tool with MongoDB integration",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --test"
   },
   "keywords": [],
   "author": "Liam Armitage",

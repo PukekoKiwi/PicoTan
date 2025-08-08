@@ -21,6 +21,10 @@ const indexFieldMap = {
 // Read operations
 
 export async function readEntries({ operation, collectionName, ids, indexValues, filters, searchText, path = "*" }) {
+  if (collectionName && !validCollections.includes(collectionName)) {
+    throw new Error(`Invalid collection: ${collectionName}`);
+  }
+
   const { db } = await connectMongo();
 
   switch (operation) {
@@ -85,28 +89,54 @@ export async function readEntries({ operation, collectionName, ids, indexValues,
       if (!collectionName || !filters || typeof filters !== "object") {
         throw new Error("Invalid or missing parameters for getEntriesBySearch");
       }
-    
+
+      const allowedTopOperators = new Set(["$or", "$and"]);
+      const allowedFieldOperators = new Set([
+        "$lt",
+        "$lte",
+        "$gt",
+        "$gte",
+        "$in",
+        "$eq",
+        "$regex",
+        "$elemMatch",
+      ]);
+
       const query = {};
       for (const [key, value] of Object.entries(filters)) {
-        // 1) If it's an operator like $or, $and, etc., use it verbatim
-        if (key.startsWith("$")) {
+          if (key.startsWith("$")) {
+            if (!allowedTopOperators.has(key)) {
+              throw new Error(`Unsupported operator: ${key}`);
+            }
+            query[key] = value;
+            continue;
+          }
+
+          if (Array.isArray(value)) {
+            query[key] = { $in: value };
+            continue;
+          }
+
+          if (typeof value === "string" && value.startsWith("regex:")) {
+            const regex = new RegExp(value.slice(6), "i");
+            query[key] = regex;
+            continue;
+          }
+
+          if (typeof value === "object" && value !== null) {
+            query[key] = {};
+            for (const [op, opVal] of Object.entries(value)) {
+              if (!op.startsWith("$") || !allowedFieldOperators.has(op)) {
+                throw new Error(`Unsupported operator in field '${key}': ${op}`);
+              }
+              query[key][op] = opVal;
+            }
+            continue;
+          }
+
           query[key] = value;
-        }
-        // 2) If it's an array but *not* a special operator, do $in
-        else if (Array.isArray(value)) {
-          query[key] = { $in: value };
-        }
-        // 3) If it's "regex:...", handle that
-        else if (typeof value === "string" && value.startsWith("regex:")) {
-          const regex = new RegExp(value.slice(6), "i");
-          query[key] = regex;
-        }
-        // 4) Otherwise, just assign the value
-        else {
-          query[key] = value;
-        }
       }
-    
+
       return db.collection(collectionName).find(query).toArray();
     }
 
