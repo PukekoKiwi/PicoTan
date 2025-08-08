@@ -11,9 +11,17 @@
 export async function readEntriesClient(operation, params = {}) {
   try {
     // `params` can include { collectionName, ids, indexValues, filters, searchText, path }
+    const jwtToken = localStorage.getItem("picotan_jwt");
+    if (!jwtToken) {
+      throw new Error("Unauthorized: No token provided");
+    }
+
     const response = await fetch("/api/readEntries", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${jwtToken}`,
+      },
       body: JSON.stringify({ operation, ...params }),
     });
 
