@@ -55,17 +55,19 @@
   <!-- Main content area, shifted right on desktop / below nav on mobile -->
   <div class="app-container">
     <main class="login-main">
-      <section class="login-container">
-        <form id="loginForm" class="login-form">
-          <label for="username" class="login-label">ユーザー名:</label>
-          <input type="text" id="username" name="username" class="login-input" placeholder="ユーザー名" required />
+      <section class="login-card">
+        <div class="login-container">
+          <form id="loginForm" class="login-form">
+            <label for="username" class="login-label">ユーザー名:</label>
+            <input type="text" id="username" name="username" class="login-input" placeholder="ユーザー名" required />
 
-          <label for="password" class="login-label">パスワード:</label>
-          <input type="password" id="password" name="password" class="login-input" placeholder="パスワード" required />
+            <label for="password" class="login-label">パスワード:</label>
+            <input type="password" id="password" name="password" class="login-input" placeholder="パスワード" required />
 
-          <button type="submit" class="login-button">ログイン</button>
-        </form>
-        <div id="loginMessage" class="login-message"></div>
+            <button type="submit" class="login-button">ログイン</button>
+          </form>
+          <div id="loginMessage" class="login-message"></div>
+        </div>
       </section>
     </main>
   </div>
