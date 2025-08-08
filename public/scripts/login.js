@@ -18,7 +18,7 @@ function makeSpinner(el, prefix = "> 接続中 ") {
   return () => clearInterval(id);            // returns stop() handle
 }
 
-// ── 3. Initialise idle prompt ────────────────────────────
+// ── 3. Initialize idle prompt ────────────────────────────
 loginMessage.textContent = "> 待機中";
 loginMessage.classList.add("idle");          // blinking cursor via CSS
 
