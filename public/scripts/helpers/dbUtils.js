@@ -1,4 +1,15 @@
+/**
+ * dbUtils.js
+ * ----------
+ * Thin wrapper around the server-side API endpoints.  Provides convenient
+ * functions to read and write entries without having to worry about constructing
+ * fetch requests manually.  Many functions are small one-liners that simply
+ * supply the correct parameters.
+ */
+
+// ---------------------------------------------------------------------------
 // Core read operations
+// ---------------------------------------------------------------------------
 
 /**
  * A generic function that talks to `/api/readEntries`

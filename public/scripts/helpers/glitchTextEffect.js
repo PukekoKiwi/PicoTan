@@ -1,15 +1,17 @@
-/*-------------------------------------------------------------
-  glitchTextEffect.js  (v2)
-  exports: glitchText()      — async “glitch-type-lock” effect
---------------------------------------------------------------*/
+/**
+ * glitchTextEffect.js
+ * -------------------
+ * Contains a single exported helper, `glitchText`, which animates a string so
+ * that each character rapidly cycles through neighbouring Unicode glyphs before
+ * settling on the final text.  Useful for giving headings or tooltips a retro
+ * terminal vibe.
+ */
 
-/* ===== 1 ▸ tiny util helpers ================================= */
-
-const rnd = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+// --- 1. tiny utility helpers -------------------------------------------------
+const rnd   = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
-/* ===== 2 ▸ random glyph drawn from the same Unicode block ==== */
-
+// --- 2. random glyph drawn from the same Unicode block -----------------------
 function siblingGlyph(cp) {
   let s, e;
   if (cp >= 0x3000 && cp <= 0x303F) {        // CJK symbols & punctuation
@@ -28,8 +30,7 @@ function siblingGlyph(cp) {
   return String.fromCodePoint(rnd(s, e));
 }
 
-/* ===== 3 ▸ default punctuation-pause table =================== */
-
+// --- 3. default punctuation-pause table -------------------------------------
 const defaultPause = {
   '、': 100, '，': 100, ',': 100,
   '。': 400, '．': 400, '.': 400,
@@ -37,17 +38,16 @@ const defaultPause = {
   '！': 500, '!': 500,
 };
 
-/* ===== 4 ▸ main exported helper ============================== */
-
+// --- 4. main exported helper -------------------------------------------------
 /**
- * Glitch-types a string, locking each real glyph after a few
- * random “sibling” frames, plus optional punctuation pauses.
+ * Glitch‑types a string, locking each real glyph after a few random "sibling"
+ * frames, plus optional punctuation pauses.
  *
- * @param {(t:string)=>void} setter    – how to write the text
- * @param {string} finalText           – target string
- * @param {number} framesPerChar=4     – glitch frames per glyph
- * @param {number} frameDelay=2        – ms between glitch frames
- * @param {Object.<string,number>} pauseTable=defaultPause
+ * @param {(t:string)=>void} setter – how to write the text
+ * @param {string} finalText        – target string
+ * @param {number} [framesPerChar=4] – glitch frames per glyph
+ * @param {number} [frameDelay=2]   – ms between glitch frames
+ * @param {Object<string,number>} [pauseTable=defaultPause]
  */
 export async function glitchText(
   setter,
@@ -59,16 +59,16 @@ export async function glitchText(
   for (let i = 0; i < finalText.length; i++) {
     const cp = finalText.codePointAt(i);
 
-    // 1-A ▸ glitch frames
+    // 1-A: glitch frames
     for (let f = 0; f < framesPerChar; f++) {
       setter(finalText.slice(0, i) + siblingGlyph(cp));
       await sleep(frameDelay);
     }
 
-    // 1-B ▸ lock real glyph
+    // 1-B: lock real glyph
     setter(finalText.slice(0, i + 1));
 
-    // 1-C ▸ optional punctuation pause
+    // 1-C: optional punctuation pause
     if (pauseTable?.[finalText[i]]) {
       await sleep(pauseTable[finalText[i]]);
     }

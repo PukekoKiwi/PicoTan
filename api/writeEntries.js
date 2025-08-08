@@ -1,13 +1,15 @@
+/**
+ * writeEntries.js
+ * ----------------
+ * Serverless endpoint for all write operations.  After authenticating the
+ * request it forwards the payload to the `writeEntries` helper and returns a
+ * descriptive response depending on the operation performed.
+ */
+
 import { authenticate } from "./auth.js";
 import { writeEntries } from "./database.js";
 import { Double } from "mongodb";
 
-/**
- * Handles:
- *  - addEntry
- *  - editEntry
- *  - deleteEntry
- */
 export default async function handler(req, res) {
   // We'll allow multiple HTTP verbs,
   // but often you'll just use POST for all state-changing ops in serverless.

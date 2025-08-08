@@ -1,7 +1,12 @@
 /**
- * Imports for the various field-creation functions
- * and other utilities. Update paths as needed.
+ * formRenders.js
+ * --------------
+ * Collection of functions that dynamically build the various entry forms used
+ * by the admin interface.  Each `renderXForm` function receives a container
+ * element and appends the necessary input fields using helpers from
+ * `formUtils` and `furiganaUtils`.
  */
+
 import TinySegmenter from "../../libs/tiny-segmenter.js";
 import { getObjectArrayValues, getValue, getMinKankenLevelForKanji, autoDetectKankenLevel, extractKanji } from "./formUtils.js";
 

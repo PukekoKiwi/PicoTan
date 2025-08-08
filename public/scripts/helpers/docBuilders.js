@@ -1,3 +1,12 @@
+/**
+ * docBuilders.js
+ * --------------
+ * Converts values from the dynamic entry forms into plain JavaScript objects
+ * that match the schema expected by the MongoDB collections.  Each `buildXDoc`
+ * function focuses on one document type and performs basic validation before
+ * returning the ready-to-send object.
+ */
+
 import {
     getValue,
     getArrayValues,

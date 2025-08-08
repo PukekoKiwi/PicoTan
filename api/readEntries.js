@@ -1,3 +1,11 @@
+/**
+ * readEntries.js
+ * --------------
+ * Serverless endpoint that proxies read-only requests to the database layer.
+ * The client specifies an operation and parameters in the request body and this
+ * handler simply forwards them to `readEntries`.
+ */
+
 import { readEntries } from "./database.js";
 
 export default async function handler(req, res) {
@@ -6,8 +14,8 @@ export default async function handler(req, res) {
   }
 
   try {
-    // The request body should include something like:
-    // { operation: "getEntriesByIndexes", collectionName: "kanji", indexValues: ["新", "感"] }
+    // The body should define the operation, collection name and any filters.
+    // Example: { operation: "getEntriesByIndexes", collectionName: "kanji", indexValues: ["新"] }
     const results = await readEntries(req.body);
     return res.status(200).json(results);
   } catch (error) {

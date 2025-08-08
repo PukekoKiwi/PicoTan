@@ -1,6 +1,17 @@
+/**
+ * formUtils.js
+ * ------------
+ * Low-level helpers for creating and reading values from the dynamic forms
+ * used throughout the admin interface.  These functions hide repetitive DOM
+ * manipulation code and expose small utilities like `createTextField`,
+ * `getArrayValues`, etc.
+ */
+
 import { getWordEntries, getKanjiEntries } from "./dbUtils.js";
 
+// ---------------------------------------------------------------------------
 // 1) DOM-Creation: Basic Fields
+// ---------------------------------------------------------------------------
 export function createTextField({ id, labelText, required = false, inputType = "text" }) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("form-field");

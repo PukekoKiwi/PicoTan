@@ -1,3 +1,12 @@
+/**
+ * database.js
+ * -----------
+ * Contains the heavy lifting for database interactions.  The `readEntries`
+ * function handles a variety of read operations while `writeEntries` manages
+ * inserts, updates and deletions.  Both are used by the serverless API
+ * endpoints.
+ */
+
 import { ObjectId } from "mongodb";
 import connectMongo from "./connectMongo.js";
 
@@ -18,7 +27,9 @@ const indexFieldMap = {
   kotowaza: "proverb",    // Indexed field for the "kotowaza" collection
 };
 
+// ---------------------------------------------------------------------------
 // Read operations
+// ---------------------------------------------------------------------------
 
 export async function readEntries({ operation, collectionName, ids, indexValues, filters, searchText, path = "*" }) {
   if (collectionName && !validCollections.includes(collectionName)) {

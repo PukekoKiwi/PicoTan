@@ -1,12 +1,23 @@
-// Import all utility functions for testing
-import { 
-  getAllEntries, 
-  getKanjiEntry, 
-  getKanjiEntriesByKankenLevel, 
-  getSentenceEntriesThatContainTheWord, 
-  getKotowazaEntriesThatContainTheKanji, 
-  fuzzySearchWords, 
-  getEntriesBySearch 
+/**
+ * main.js
+ * -------
+ * Entry point for pages that use the standard navigation layout.  The top
+ * section (commented out) demonstrates how to call various database helper
+ * functions and can be used as reference or for manual testing.  The bottom
+ * section wires up navigation buttons and login/logout links once the DOM is
+ * ready.
+ */
+
+// Import helpers that talk to the API. These imports are kept for reference
+// in the commented demo code below.
+import {
+  getAllEntries,
+  getKanjiEntry,
+  getKanjiEntriesByKankenLevel,
+  getSentenceEntriesThatContainTheWord,
+  getKotowazaEntriesThatContainTheKanji,
+  fuzzySearchWords,
+  getEntriesBySearch
 } from "./helpers/dbUtils.js";
 
 /*
@@ -93,37 +104,44 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 */
 
-/* ---------------------------------------- */
-/*       Page Initialization & Nav UI      */
-/* ---------------------------------------- */
+/* ------------------------------------------------------------------------- */
+/*       Page Initialization & Nav UI                                       */
+/* ------------------------------------------------------------------------- */
 document.addEventListener('DOMContentLoaded', () => {
-  // Account menu toggle
+  // --- Account menu toggle -------------------------------------------------
+  // Clicking the avatar icon reveals or hides the small account menu.
   const accountBtn  = document.querySelector('#nav-account-btn');
   const accountMenu = document.querySelector('#account-menu');
   accountBtn.addEventListener('click', () => {
     accountMenu.classList.toggle('hidden');
   });
 
-  // Sidebar / Top-bar navigation routing
+  // --- Sidebar / top-bar navigation ---------------------------------------
+  // Buttons declare their target page via data-target. When clicked we simply
+  // set window.location to that target.
   document.querySelectorAll('.nav-btn[data-target]').forEach(btn => {
     btn.addEventListener('click', () => {
       window.location.href = btn.dataset.target;
     });
   });
 
-  // Login / Logout handlers
+  // --- Login / logout visibility ------------------------------------------
+  // If a JWT exists in localStorage we assume the user is logged in and show
+  // the logout button instead of the login button.
   const loginBtn  = document.querySelector('#login-btn');
   const logoutBtn = document.querySelector('#logout-btn');
   const token     = localStorage.getItem('picotan_jwt');
 
   if (token) {
     loginBtn.style.display  = 'none';
-    logoutBtn.style.display = '';       // restores to default
+    logoutBtn.style.display = ''; // restore default
   } else {
     logoutBtn.style.display = 'none';
     loginBtn.style.display  = '';
   }
-  
+
+  // When the user clicks login or logout, redirect accordingly and update
+  // localStorage.
   loginBtn?.addEventListener('click', () => {
     window.location.href = 'login.html';
   });

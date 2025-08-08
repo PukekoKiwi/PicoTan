@@ -1,7 +1,14 @@
+/**
+ * connectMongo.test.js
+ * --------------------
+ * Minimal unit test ensuring that the database connector throws a helpful error
+ * when the required `MONGODB_URI` environment variable is missing.
+ */
+
 import test from 'node:test';
 import assert from 'node:assert/strict';
 
-// Import the module under test
+// Module under test
 import connectMongo from './connectMongo.js';
 
 test('connectMongo throws when MONGODB_URI is not defined', async () => {

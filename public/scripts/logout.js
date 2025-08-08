@@ -1,3 +1,11 @@
+/**
+ * logout.js
+ * ---------
+ * Handles logging the user out and also performs a quick check on page load to
+ * ensure any stored JSON Web Token has not expired.  If it has, the user is
+ * redirected to the login page immediately.
+ */
+
 document.addEventListener("DOMContentLoaded", () => {
   handleExpiredToken(); // Check for expired token on page load
 
@@ -27,7 +35,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 });
 
-// Log the user out if the token is expired
+/**
+ * Log the user out if the saved JWT is past its expiration date.
+ */
 function handleExpiredToken() {
   const token = localStorage.getItem("picotan_jwt");
   if (token && isTokenExpired(token)) {
@@ -37,6 +47,12 @@ function handleExpiredToken() {
   }
 }
 
+/**
+ * Decode a JWT and compare the `exp` claim with the current time.
+ *
+ * @param {string} token - JWT string.
+ * @returns {boolean} True if the token is expired or invalid.
+ */
 function isTokenExpired(token) {
   try {
     const payload = JSON.parse(atob(token.split(".")[1])); // Decode the payload
