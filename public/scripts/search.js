@@ -164,7 +164,7 @@ function initModeRail() {
     el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
 
   document.addEventListener("keydown", (e) => {
-    if (isTypingTarget(e.target) && e.target.id === "search-input") return;
+    if (isTypingTarget(e.target)) return;
 
     if (/^[1-6]$/.test(e.key)) {
       activateByIndex(parseInt(e.key, 10) - 1, { focus: true });
