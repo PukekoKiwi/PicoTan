@@ -12,7 +12,6 @@
             var(--accent-color) -200%,
             rgba(13, 15, 17, 1) 25%);
 
-    background-attachment: fixed;
     background-size: cover;
 
     display: flex;
@@ -57,23 +56,21 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    filter: drop-shadow(1px 0 0 var(--accent-color)) 
-    drop-shadow(-1px 0 0 var(--accent-color)) 
-    drop-shadow(0 1px 0 var(--accent-color)) 
-    drop-shadow(0 -1px 0 var(--accent-color)) 
-    drop-shadow(0 0 10px rgba(var(--accent), .3));
-    
-    -webkit-filter: drop-shadow(1px 0 0 var(--accent-color)) 
-                drop-shadow(-1px 0 0 var(--accent-color)) 
-                drop-shadow(0 1px 0 var(--accent-color)) 
-                drop-shadow(0 -1px 0 var(--accent-color)) 
-                drop-shadow(0 0 10px rgba(var(--accent), .3));
-    position: relative;
-
-    isolation: isolate;
-    transform: translateZ(0);
     overflow: visible;
+    position: relative;
+  
+    filter:
+      drop-shadow(1px 0 0 var(--accent-color))
+      drop-shadow(-1px 0 0 var(--accent-color))
+      drop-shadow(0 1px 0 var(--accent-color))
+      drop-shadow(0 -1px 0 var(--accent-color))
+      drop-shadow(0 0 10px rgba(var(--accent), .3));
+    -webkit-filter:
+      drop-shadow(1px 0 0 var(--accent-color))
+      drop-shadow(-1px 0 0 var(--accent-color))
+      drop-shadow(0 1px 0 var(--accent-color))
+      drop-shadow(0 -1px 0 var(--accent-color))
+      drop-shadow(0 0 10px rgba(var(--accent), .3));
 }
 
 .login-container {
@@ -255,12 +252,17 @@
   MOBILE STYLES
 ----------------------------------------------------------------*/
 
-@media (max-width: 768px) {
-    .app-container {
+@media (max-width: 768px){
+    .app-container{
       margin-left: 0;
       height: auto;
       min-height: calc(100dvh - var(--btn-size-mobile));
       overflow: visible;
       padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
+      background-attachment: scroll;   /* IMPORTANT: match index */
+    }
+    .login-main{
+      transform: none;                 /* drop the GPU nudge */
+      isolation: auto;
     }
 }
