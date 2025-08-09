@@ -259,10 +259,16 @@
       min-height: calc(100dvh - var(--btn-size-mobile));
       overflow: visible;
       padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
-      background-attachment: scroll;   /* IMPORTANT: match index */
+      background-attachment: scroll;
     }
+
+    .app-container::before,
+    .app-container::after{
+      display:none;
+    }
+
     .login-main{
-      transform: none;                 /* drop the GPU nudge */
+      transform: none;
       isolation: auto;
     }
 }
