@@ -453,7 +453,10 @@
   .search-controls__button { height: 2.6rem; }
 }
 @media (max-width: 768px) {
-  .search-controls__form { gap: var(--spacing-md); }
+  .search-controls__form { 
+    gap: var(--spacing-md); 
+    padding: var(--spacing-md);
+  }
   /* stack actions full-width on mobile for easy tapping */
   .search-controls__toggle,
   .search-controls__button {
