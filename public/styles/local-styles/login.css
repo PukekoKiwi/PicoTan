@@ -57,6 +57,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
 
     filter: drop-shadow(1px 0 0 var(--accent-color)) 
     drop-shadow(-1px 0 0 var(--accent-color)) 
@@ -70,7 +71,11 @@
                 drop-shadow(0 -1px 0 var(--accent-color)) 
                 drop-shadow(0 0 10px rgba(var(--accent), .3));
     position: relative;
-    /* keeps ::after of inner in place */
+
+    isolation: isolate;
+    contain: paint;
+    will-change: filter;
+    transform: translateZ(0);
 }
 
 .login-container {
@@ -254,7 +259,17 @@
 
 @media (max-width: 768px) {
     .app-container {
-        margin-left: 0;
-        padding-top: var(--btn-size-mobile);
+      margin-left: 0;
+      height: auto;
+      min-height: calc(100dvh - var(--btn-size-mobile));
+      overflow: visible;
+      padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
+      background-attachment: scroll;
     }
-}
+  
+    .app-container::before {
+      background: transparent;
+      mix-blend-mode: normal;
+    }
+
+  }
