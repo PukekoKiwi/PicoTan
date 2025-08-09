@@ -56,16 +56,49 @@
   <div class="app-container">
     <main class="login-main">
       <section class="login-container">
-        <form id="loginForm" class="login-form">
-          <label for="username" class="login-label">ユーザー名:</label>
-          <input type="text" id="username" name="username" class="login-input" placeholder="ユーザー名" required />
+        
+        <div class="panel-wrap">
 
-          <label for="password" class="login-label">パスワード:</label>
-          <input type="password" id="password" name="password" class="login-input" placeholder="パスワード" required />
+          <svg class="panel-outline" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <defs>
+              <filter id="panelGlow" x="-40%" y="-40%" width="180%" height="180%" color-interpolation-filters="sRGB">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="b1"/>
+                <feComposite in="b1" in2="SourceAlpha" operator="out" result="o1"/>
+                <feFlood flood-color="var(--accent-color)" flood-opacity="0.35" result="c1"/>
+                <feComposite in="c1" in2="o1" operator="in" result="g1"/>
+        
+                <feGaussianBlur in="SourceAlpha" stdDeviation="0.7" result="b2"/>
+                <feComposite in="b2" in2="SourceAlpha" operator="out" result="o2"/>
+                <feFlood flood-color="var(--accent-color)" flood-opacity="0.9" result="c2"/>
+                <feComposite in="c2" in2="o2" operator="in" result="g2"/>
+        
+                <feMerge>
+                  <feMergeNode in="g1"/><feMergeNode in="g2"/><feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+            <polygon
+              points="90,10 20,10 15,15 10,15 10,90 80,90 90,80"
+              fill="rgb(15, 15, 30)" stroke="var(--accent-color)" stroke-width="2"
+              stroke-linejoin="miter" stroke-miterlimit="3"
+              vector-effect="non-scaling-stroke" filter="url(#panelGlow)"/>
+          </svg>
 
-          <button type="submit" class="login-button">ログイン</button>
-        </form>
-        <div id="loginMessage" class="login-message"></div>
+          <div class="panel-surface">
+            <form id="loginForm" class="login-form">
+              <label for="username" class="login-label">ユーザー名:</label>
+              <input type="text" id="username" name="username" class="login-input" placeholder="ユーザー名" required />
+
+              <label for="password" class="login-label">パスワード:</label>
+              <input type="password" id="password" name="password" class="login-input" placeholder="パスワード" required />
+
+              <button type="submit" class="login-button">ログイン</button>
+            </form>
+            <div id="loginMessage" class="login-message"></div>
+          </div>
+
+        </div>
+
       </section>
     </main>
   </div>

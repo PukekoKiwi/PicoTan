@@ -49,7 +49,7 @@
     /* above vignette but below nav */
 }
 
-.login-main {
+.login-main{
     max-width: 70vw;
     box-sizing: border-box;
     margin-bottom: 100px;
@@ -58,46 +58,35 @@
     align-items: center;
     overflow: visible;
     position: relative;
-  
-    filter:
-      drop-shadow(1px 0 0 var(--accent-color))
-      drop-shadow(-1px 0 0 var(--accent-color))
-      drop-shadow(0 1px 0 var(--accent-color))
-      drop-shadow(0 -1px 0 var(--accent-color))
-      drop-shadow(0 0 10px rgba(var(--accent), .3));
-    -webkit-filter:
-      drop-shadow(1px 0 0 var(--accent-color))
-      drop-shadow(-1px 0 0 var(--accent-color))
-      drop-shadow(0 1px 0 var(--accent-color))
-      drop-shadow(0 -1px 0 var(--accent-color))
-      drop-shadow(0 0 10px rgba(var(--accent), .3));
-}
+  }
 
-.login-container {
+  .login-container{
+    position: relative;
+    overflow: visible;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 40px 20px 20px;
+  }
 
-    padding: 40px 20px 20px 20px;
-    background-color: rgb(15, 15, 19);
-    clip-path: polygon(100% 0,
-    15% 0,
-    10% 7%,
-    0% 7%,
-    0 95%,
-    2% 100%,
-    95% 100%,
-    100% 90%);
-    -webkit-clip-path: polygon(100% 0,
-    15% 0,
-    10% 7%,
-    0% 7%,
-    0 95%,
-    2% 100%,
-    95% 100%,
-    100% 90%);
-}
+  .panel-wrap {
+    padding: 40px;
+  }
+
+  .panel-surface{
+    position: relative;
+    z-index: 1;
+  }
+  
+  .panel-outline{
+    position: absolute;
+    inset: -2px;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+ }
 
 .login-form {
     width: 100%;
@@ -232,6 +221,10 @@
     text-shadow: 0 0 6px rgba(var(--accent), .35);   /* faint glow       */
     min-height: 1.4em;                               /* reserve a line   */
     position: relative;                              /* ↓ places cursor  */
+    display: inline-flex;
+    gap: .35em;
+    align-items: baseline;
+    margin-inline: auto;
   }
   
   /* blinking block cursor (visible when .idle) */
@@ -242,6 +235,7 @@
     top: 0;
     width: 0.55em;
     height: 1.2em;
+    display:inline-block;
     background: var(--accent-color);
     animation: blink 1s steps(1) infinite;
   }
