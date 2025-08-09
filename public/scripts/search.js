@@ -61,6 +61,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (searchBtn)         searchBtn.addEventListener("click", handleSearch);
   if (searchTypeSelect)  searchTypeSelect.addEventListener("change", () => {
     if (inAdvancedMode) renderAdvancedSearchFields();
+    clearResults();
+    if (searchInput) searchInput.value = "";
   });
 
   if (toggleAdvancedBtn) toggleAdvancedBtn.type = "button";
