@@ -72,10 +72,8 @@
     position: relative;
 
     isolation: isolate;
-    will-change: filter;
     transform: translateZ(0);
     overflow: visible;
-    backface-visibility: hidden;
 }
 
 .login-container {
@@ -259,10 +257,10 @@
 
 @media (max-width: 768px) {
     .app-container {
-        background-attachment: scroll;
-      }
-    .app-container::after{
-        /* stop blending over filtered content on iOS */
-        mix-blend-mode: normal;
+      margin-left: 0;
+      height: auto;
+      min-height: calc(100dvh - var(--btn-size-mobile));
+      overflow: visible;
+      padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
     }
 }
