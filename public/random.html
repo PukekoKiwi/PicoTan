@@ -1,20 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="ja">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta name="description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語を見つける！" />
-  <meta property="og:title" content="ピコ鍛 - お任せ" />
-  <meta property="og:description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語を見つける！" />
+  <meta name="description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語ほかを見つける！" />
+  <meta property="og:title" content="ピコ鍛 - おまかせ" />
+  <meta property="og:description" content="今日のピコっと発見！ランダムな漢字や言葉、四字熟語ほかを見つける！" />
 
   <link rel="icon" href="assets/favicons/picotan_neutral.ico" />
   <title>おまかせ - ピコ鍛</title>
 
-  <!-- Styling -->
+  <!-- Vendor / Base -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
   <link rel="stylesheet" href="styles/global-styles/global.css" />
+
+  <!-- Page styles -->
   <link rel="stylesheet" href="styles/local-styles/random.css" />
 
   <!-- Sitewide Scripts -->
@@ -22,24 +23,25 @@
   <script type="module" src="scripts/logout.js"></script>
   <script type="module" src="scripts/uiGlitch.js"></script>
   <script type="module" src="scripts/greeting.js"></script>
+  <!-- Page script -->
+  <script type="module" src="scripts/random.js" defer></script>
 </head>
-
 <body>
 
-  <!-- Side Bar Navigation -->
+  <!-- Side Bar Navigation (unchanged) -->
   <nav id="main-nav">
     <div class="nav-section nav-top" style="position: relative;">
       <button id="nav-account-btn" class="nav-btn no-tooltip" data-tooltip="アカウント"><i class="fa-regular fa-circle-user"></i></button>
-      <div id="account-menu" class="account-menu hidden">
-        <button id="login-btn" class="menu-item">ログイン</button>
-        <button id="logout-btn" class="menu-item">ログアウト</button>
+      <div id="account-menu" class="account-menu hidden" role="menu" aria-label="アカウント">
+        <button id="login-btn" class="menu-item" role="menuitem">ログイン</button>
+        <button id="logout-btn" class="menu-item" role="menuitem">ログアウト</button>
       </div>
     </div>
     <div class="nav-section nav-middle">
       <button class="nav-btn" data-target="search.html" data-tooltip="検索"><i class="fa-solid fa-magnifying-glass"></i></button>
       <button class="nav-btn" data-target="add-entry.html" data-tooltip="項目追加"><i class="fa-solid fa-plus"></i></button>
       <button class="nav-btn" data-target="review.html" data-tooltip="復習"><i class="fa-regular fa-clone"></i></button>
-      <button class="nav-btn" data-target="random.html" data-tooltip="お任せ"><i class="fa-regular fa-compass"></i></button>
+      <button class="nav-btn" data-target="random.html" data-tooltip="お任せ" aria-current="page"><i class="fa-regular fa-compass"></i></button>
     </div>
     <div class="nav-section nav-bottom">
       <div class="picotan-widget">
@@ -47,49 +49,121 @@
         <div class="chat-bubble" id="greeting-message">頑張って！</div>
       </div>
     </div>
-  </nav>  
+  </nav>
 
-  <!-- Main content area, shifted right on desktop / below nav on mobile -->
+  <!-- Main content area -->
   <div class="app-container">
     <main class="random-main">
+
+      <!-- SETTINGS (above results) -->
       <section class="random-controls">
-        <h1 class="random-controls__title">おまかせ項目</h1>
-        <label for="random-type">種類</label>
-        <select id="random-type" class="random-controls__select">
-          <option value="kanji">漢字</option>
-          <option value="word">言葉</option>
-          <option value="idiom">四字熟語</option>
-        </select>
+        <h1 class="random-controls__title">/ おまかせ <span class="title-trail" aria-hidden="true"></span></h1>
 
-        <label for="random-level">級</label>
-        <select id="random-level" class="random-controls__select">
-          <option value="all">全</option>
-          <option value="1">一</option>
-          <option value="1.5">準一</option>
-          <option value="2">二</option>
-          <option value="2.5">準二</option>
-          <option value="3">三</option>
-          <option value="4">四</option>
-          <option value="5">五</option>
-          <option value="6">六</option>
-          <option value="7">七</option>
-          <option value="8">八</option>
-          <option value="9">九</option>
-          <option value="10">十</option>
-        </select>
+        <div class="random-controls__form-wrapper">
+          <form class="random-controls__form" id="random-form" autocomplete="off" novalidate>
 
-        <button id="random-btn" class="random-controls__button">おまかせ</button>
-      </section>
+            <!-- Keep native selects for form binding & A11y -->
+            <label for="random-type" class="sr-only">種類</label>
+            <select id="random-type" class="sr-only">
+              <option value="kanji" selected>漢字</option>
+              <option value="word">言葉</option>
+              <option value="idiom">四字熟語</option>
+              <option value="kotowaza">諺</option>
+              <option value="sentences">例文</option>
+            </select>
 
-      <section class="random-display">
-        <h2 class="random-display__heading">結果</h2>
-        <div id="random-result" class="random-display__result">
-          <!-- The random item info goes here -->
+            <label for="random-level" class="sr-only">級</label>
+            <select id="random-level" class="sr-only">
+              <option value="10">十</option>
+              <option value="9">九</option>
+              <option value="8">八</option>
+              <option value="7">七</option>
+              <option value="6">六</option>
+              <option value="5">五</option>
+              <option value="4">四</option>
+              <option value="3" selected>三</option>
+              <option value="2.5">準二</option>
+              <option value="2">二</option>
+              <option value="1.5">準一</option>
+              <option value="1">一</option>
+              <option value="all">全</option>
+            </select>
+
+            <div class="random-controls__grid">
+
+              <!-- MODE: five-box selector (left) -->
+              <fieldset class="mode-block" aria-labelledby="mode-label">
+                <legend id="mode-label" class="mode-block__label">検索 MODE</legend>
+
+                <div class="mode-switch" id="mode-switch" data-animate="1">
+                  <span class="mode-cursor" id="mode-cursor" aria-hidden="true"></span>
+
+                  <input type="radio" id="mode-kanji" name="mode" value="kanji" checked>
+                  <label class="mode-chip" for="mode-kanji" data-color="kanji" tabindex="0">
+                    <span class="chip-jp">漢字</span>
+                    <span class="chip-en">KANJI</span>
+                  </label>
+
+                  <input type="radio" id="mode-words" name="mode" value="word">
+                  <label class="mode-chip" for="mode-words" data-color="words" tabindex="0">
+                    <span class="chip-jp">言葉</span>
+                    <span class="chip-en">WORDS</span>
+                  </label>
+
+                  <input type="radio" id="mode-yojijukugo" name="mode" value="idiom">
+                  <label class="mode-chip" for="mode-yojijukugo" data-color="yojijukugo" tabindex="0">
+                    <span class="chip-jp">四字熟語</span>
+                    <span class="chip-en">YOJIJUKUGO</span>
+                  </label>
+
+                  <input type="radio" id="mode-kotowaza" name="mode" value="kotowaza">
+                  <label class="mode-chip" for="mode-kotowaza" data-color="kotowaza" tabindex="0">
+                    <span class="chip-jp">諺</span>
+                    <span class="chip-en">PROVERBS</span>
+                  </label>
+
+                  <input type="radio" id="mode-sentences" name="mode" value="sentences">
+                  <label class="mode-chip" for="mode-sentences" data-color="sentences" tabindex="0">
+                    <span class="chip-jp">例文</span>
+                    <span class="chip-en">SENTENCES</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <!-- KANKEN HUD SLIDER (right) -->
+              <section class="kanken-hud" aria-labelledby="kanken-label">
+                <div class="kanken-hud__label" id="kanken-label">
+                  <span class="led" aria-hidden="true"></span>
+                  <span>漢検 LEVEL</span>
+                  <output class="kanken-hud__readout" id="level-readout">三</output>
+                </div>
+                <div class="kanken-hud__range-wrap" id="rangeWrap">
+                  <div class="kanken-hud__grid" aria-hidden="true"></div>
+                  <output class="kanken-hud__bubble" id="bubble" aria-live="polite">三</output>
+                  <input id="level-range" class="kanken-hud__slider" type="range"
+                         min="0" max="12" step="1" value="7"
+                         aria-valuemin="0" aria-valuemax="12" aria-valuenow="7" aria-label="漢検レベル（逆方向）" />
+                  <ol class="kanken-hud__marks" id="marks" aria-hidden="true"></ol>
+                  <div class="kanken-hud__meter" id="meter" aria-hidden="true"></div>
+                </div>
+              </section>
+
+            </div>
+
+            <div class="random-actions">
+              <button id="random-btn" class="random-controls__button" type="button">おまかせ</button>
+            </div>
+          </form>
         </div>
       </section>
+
+      <!-- RESULTS (below) -->
+      <section class="random-results">
+        <h2 class="random-results__heading">/ 結果</h2>
+        <div id="random-result" class="random-results__container"><!-- large cards will go here --></div>
+      </section>
+
     </main>
   </div>
-
 </body>
-
 </html>
