@@ -136,6 +136,8 @@ function initModeRail() {
     if (dispatch) searchTypeSelect.dispatchEvent(new Event("change", { bubbles: true }));
     syncAccent(value);
 
+    if (searchInput) searchInput.focus({ preventScroll: true });
+
     // After the first activation, enable transitions
     if (!animateEnabled) {
       requestAnimationFrame(() => {
