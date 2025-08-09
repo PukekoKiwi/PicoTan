@@ -6,50 +6,55 @@
     height: 100vh;
     overflow: hidden;
     margin-left: var(--nav-width);
-
+  
     /* from radicals color to base fill */
-    background-image: linear-gradient(185deg,
-            var(--accent-color) -200%,
-            rgba(13, 15, 17, 1) 25%);
-
+    background-image: linear-gradient(
+      185deg,
+      var(--accent-color) -200%,
+      rgba(13, 15, 17, 1) 25%
+    );
+  
     background-size: cover;
-
+  
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-.app-container::before {
+  }
+  
+  .app-container::before {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
     background-size: 1024px 1024px;
-    background: radial-gradient(circle at 25% 85%,
-            rgba(114, 105, 221, 0.08) 0%,
-            rgba(11, 21, 158, 0) 35%);
+    background: radial-gradient(
+      circle at 25% 85%,
+      rgba(114, 105, 221, 0.08) 0%,
+      rgba(11, 21, 158, 0) 35%
+    );
     z-index: 4000;
-}
-
-.app-container::after {
+  }
+  
+  .app-container::after {
     content: '';
     position: absolute;
     inset: 0;
     pointer-events: none;
-
+  
     background-image:
-        url("/assets/images/white_noise_overlay.png"),
-        repeating-linear-gradient(to bottom,
-            rgba(255, 255, 255, 0.06) 0px,
-            rgba(255, 255, 255, 0.06) 3px,
-            transparent 3px,
-            transparent 6px);
+      url('/assets/images/white_noise_overlay.png'),
+      repeating-linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 0.06) 0px,
+        rgba(255, 255, 255, 0.06) 3px,
+        transparent 3px,
+        transparent 6px
+      );
     mix-blend-mode: soft-light;
-    z-index: 5000;
-    /* above vignette but below nav */
-}
-
-.login-main{
+    z-index: 5000; /* above vignette but below nav */
+  }
+  
+  .login-main {
     max-width: 70vw;
     box-sizing: border-box;
     margin-bottom: 100px;
@@ -60,47 +65,49 @@
     position: relative;
   }
 
-  .login-container{
+  /*---------------------------------------------------------------
+    1. PANEL (simplified structure)
+  ----------------------------------------------------------------*/
+  .panel {
     position: relative;
     overflow: visible;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 20px 20px;
-  }
-
-  .panel-wrap {
-    padding: 40px;
-  }
-
-  .panel-surface{
-    position: relative;
-    z-index: 1;
   }
   
-  .panel-outline{
+  .panel__content {
+    position: relative;
+    z-index: 1;
+    margin: 100px clamp(80px, 10vw, 100px) 80px clamp(80px, 10vw, 100px);
+  }
+  
+  .panel__svg {
     position: absolute;
-    inset: -2px;
     width: 100%;
     height: 100%;
     pointer-events: none;
     z-index: 0;
- }
-
-.login-form {
+  }
+  
+  /*---------------------------------------------------------------
+    2. FORM
+  ----------------------------------------------------------------*/
+  .login-form {
     width: 100%;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
-}
-
-.login-label {
+  }
+  
+  .login-label {
     display: none;
-}
-
-.login-input {
-    font-family: "Yu Gothic", "Meiryo", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+  }
+  
+  .login-input {
+    font-family: 'Yu Gothic', 'Meiryo', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP',
+      sans-serif;
     box-sizing: border-box;
     width: 100%;
     padding: 1rem 1rem 1rem 0.75rem;
@@ -112,39 +119,38 @@
     outline: none;
     transition: border 0.2s;
     margin-bottom: 0;
-}
-
-:-webkit-autofill {
+  }
+  
+  /* Autofill neutralization */
+  :-webkit-autofill {
     filter: none;
     box-shadow: 0 0 0 100px var(--accent-color) inset;
-}
-
-.login-input:focus {
+  }
+  
+  .login-input:focus {
     border-color: var(--accent-color, #7269dd);
     background: #23243a;
-}
-
-.login-input::placeholder {
+  }
+  
+  .login-input::placeholder {
     color: #b0b2c3;
     opacity: 1;
     font-size: 1rem;
-}
-
-#username::placeholder {
-    content: "ユーザー名";
-}
-
-#password::placeholder {
-    content: "パスワード";
-}
-
-
-.login-button {
+  }
+  
+  /*---------------------------------------------------------------
+    3. BUTTON
+  ----------------------------------------------------------------*/
+  .login-button {
     --background-color: rgb(15, 15, 19);
-    --border-color: linear-gradient(to bottom right, var(--accent-color), var(--accent-color));
+    --border-color: linear-gradient(
+      to bottom right,
+      var(--accent-color),
+      var(--accent-color)
+    );
     --border-width: 0.1em;
     --edge-size: 0.5em;
-
+  
     cursor: pointer;
     background: var(--background-color);
     padding: 0.5em 1.5em;
@@ -153,81 +159,90 @@
     isolation: isolate;
     display: inline-grid;
     place-content: center;
-    clip-path: polygon(var(--edge-size) 0%,
-            100% 0,
-            100% calc(100% - var(--edge-size)),
-            calc(100% - var(--edge-size)) 100%,
-            0 100%,
-            0% var(--edge-size));
-
+    clip-path: polygon(
+      var(--edge-size) 0%,
+      100% 0,
+      100% calc(100% - var(--edge-size)),
+      calc(100% - var(--edge-size)) 100%,
+      0 100%,
+      0% var(--edge-size)
+    );
+  
     font-size: 1.1rem;
     font-weight: 600;
-
-    transition: color .05s, background .25s;
-
+  
+    transition: color 0.05s, background 0.25s;
     color: var(--accent-color);
-}
-
-.login-button::before {
-    content: "";
+  }
+  
+  .login-button::before {
+    content: '';
     position: absolute;
     inset: 0;
     background: var(--border-color);
     z-index: -2;
-    transition: background .25s;
-}
-
-.login-button::after {
-    content: "";
+    transition: background 0.25s;
+  }
+  
+  .login-button::after {
+    content: '';
     position: absolute;
     inset: 0;
     background: var(--background-color);
     z-index: -1;
-    clip-path: polygon(var(--border-width) calc(var(--edge-size) + var(--border-width) * 0.5),
-
-            calc(var(--edge-size) + var(--border-width) * 0.5) var(--border-width),
-
-            calc(100% - var(--border-width)) var(--border-width),
-
-            calc(100% - var(--border-width)) calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5)),
-
-            calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5)) calc(100% - var(--border-width)),
-
-            calc(var(--border-width)) calc(100% - var(--border-width)));
-}
-
-.login-button:hover {
-    color: var(--text-color);
-  }
-
-.login-button:hover::after {
-    background: rgb(17, 17, 21);
-}
-
-.login-button:hover::before {
-    background: linear-gradient(to bottom right, var(--accent-color), var(--words-color));
-    filter: brightness(1.3);
-}
-
-.login-message {
-    margin-top: 1.2rem;
-    color: var(--accent-color);
-    font-size: 1rem;
-    min-height: 1.2em;
-    text-align: center;
-    font-family: Consolas, monospace;   /* monospace vibe   */
-    letter-spacing: .04em;
-    font-size: 1.05rem;                              /* a hair larger    */
-    text-shadow: 0 0 6px rgba(var(--accent), .35);   /* faint glow       */
-    min-height: 1.4em;                               /* reserve a line   */
-    position: relative;                              /* ↓ places cursor  */
-    display: inline-flex;
-    gap: .35em;
-    align-items: baseline;
-    margin-inline: auto;
+    clip-path: polygon(
+      var(--border-width) calc(var(--edge-size) + var(--border-width) * 0.5),
+      calc(var(--edge-size) + var(--border-width) * 0.5) var(--border-width),
+      calc(100% - var(--border-width)) var(--border-width),
+      calc(100% - var(--border-width))
+        calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5)),
+      calc(100% - calc(var(--edge-size) + var(--border-width) * 0.5))
+        calc(100% - var(--border-width)),
+      calc(var(--border-width)) calc(100% - var(--border-width))
+    );
   }
   
-  /* blinking block cursor (visible when .idle) */
+  .login-button:hover {
+    color: var(--text-color);
+  }
+  
+  .login-button:hover::after {
+    background: rgb(17, 17, 21);
+  }
+  
+  .login-button:hover::before {
+    background: linear-gradient(
+      to bottom right,
+      var(--accent-color),
+      var(--words-color)
+    );
+    filter: brightness(1.3);
+  }
+  
+  /*---------------------------------------------------------------
+    4. LOGIN MESSAGE (terminal vibe)
+  ----------------------------------------------------------------*/
+  .login-message {
+    /* positioning + centering */
+    display: flex;                 /* was inline-flex */
+    width: fit-content;            /* shrink to message width */
+    max-width: 100%;               /* don’t overflow small screens */
+    margin: 1.2rem auto 0;         /* centers horizontally */
+  
+    /* existing aesthetics (kept) */
+    color: var(--accent-color);
+    font-size: 1.05rem;
+    font-family: Consolas, monospace;
+    letter-spacing: .04em;
+    text-shadow: 0 0 6px rgba(var(--accent), .35);
+    min-height: 1.4em;
+    position: relative;            /* anchor the blinking cursor */
+    gap: .35em;
+    align-items: baseline;
+    text-align: center;            /* if the text wraps */
+  }
+  
+  /* blinking block cursor (unchanged, still aligns after text) */
   .login-message.idle::after {
     content: "";
     position: absolute;
@@ -235,34 +250,39 @@
     top: 0;
     width: 0.55em;
     height: 1.2em;
-    display:inline-block;
+    display: inline-block;
     background: var(--accent-color);
     animation: blink 1s steps(1) infinite;
   }
   
-  @keyframes blink { 50% { opacity: 0; } }
-
-/* ---------------------------------------------------------------
-  MOBILE STYLES
-----------------------------------------------------------------*/
-
-@media (max-width: 768px){
-    .app-container{
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  
+  /* ---------------------------------------------------------------
+    5. MOBILE STYLES
+  ----------------------------------------------------------------*/
+  @media (max-width: 768px) {
+    .app-container {
       margin-left: 0;
       height: auto;
       min-height: calc(100dvh - var(--btn-size-mobile));
       overflow: visible;
-      padding-top: calc(var(--btn-size-mobile) + env(safe-area-inset-top, 0));
+      padding-top: calc(
+        var(--btn-size-mobile) + env(safe-area-inset-top, 0)
+      );
       background-attachment: scroll;
     }
-
+  
     .app-container::before,
-    .app-container::after{
-      display:none;
+    .app-container::after {
+      display: none;
     }
-
-    .login-main{
-      transform: none;
-      isolation: auto;
+  
+    .login-main {
+        max-width: 90vw;
+        margin-bottom: 50px;
     }
-}
+  }

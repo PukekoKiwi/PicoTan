@@ -393,7 +393,7 @@
   padding: .58rem .7rem;             /* ~36–40px tall touch target */
   font-size: .95rem;                 /* was 1rem */
   border: 1px solid #3e4254;         /* thinner */
-  border-radius: 6px;                /* tighter */
+  border-radius: 3px;                /* tighter */
   background: #24263a;
 }
 #advanced-search input[type="text"]::placeholder { opacity: .85; }
@@ -460,4 +460,27 @@
     width: 100%;
     margin-left: 0;
   }
+}
+
+@media (max-width: 768px) {
+  .search-controls__form-wrapper {
+    /* remove complex neon drop-shadows */
+    filter: none;
+    -webkit-filter: none;
+  }
+
+  .search-controls__form {
+    /* remove shaped clip-path */
+    clip-path: none;
+    -webkit-clip-path: none;
+
+    /* normal card styling */
+    background: rgba(13, 15, 17, 0.95);
+    border: 1px solid var(--accent-color);
+    border-radius: 2px;
+
+    /* subtle glow */
+    box-shadow: 0 0 8px rgba(var(--accent), 0.5), 0 0 16px rgba(var(--accent), 0.5);
+  }
+
 }
